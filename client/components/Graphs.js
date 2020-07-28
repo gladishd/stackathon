@@ -9,7 +9,6 @@ export class Graphs extends React.Component {
     super(props)
     this.state = {
       data1: {
-        labels: ['January', 'February', 'March', 'April', 'May'],
         datasets: [
           {
             label: 'Rainfall',
@@ -23,7 +22,6 @@ export class Graphs extends React.Component {
         ]
       },
       data2: {
-        labels: ['January', 'February', 'March', 'April', 'May'],
         datasets: [
           {
             label: 'Rainfall',
@@ -57,13 +55,18 @@ export class Graphs extends React.Component {
   }
   render() {
     let reduxState = store.getState()
-    let newArr = []
+    let values = []
+    let months = []
     for (let i = 0; i < reduxState.rainfall.length; i++) {
-      newArr.push(reduxState.rainfall[i].value)
+      values.push(reduxState.rainfall[i].value)
+      // console.log(reduxState.rainfall);
+      months.push(reduxState.rainfall[i].month)
     }
     let {data1, data2} = this.state
-    data1.datasets[0].data = newArr
-    data2.datasets[0].data = newArr
+    data1.datasets[0].data = values
+    data2.datasets[0].data = values
+    data1.labels = months
+    data2.labels = months
     return (
       <div>
         hello world

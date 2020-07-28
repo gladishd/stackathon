@@ -33,6 +33,7 @@ export const fetchData = () => async dispatch => {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_DATA:
+      console.log(action)
       return action.data
     default:
       return state

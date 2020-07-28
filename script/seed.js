@@ -11,16 +11,20 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123'}),
     User.create({email: 'murphy@email.com', password: '123'})
   ])
+  const rainfall1 = await Promise.all([
+    Rainfall.create({value: 0, month: 'January'})
+  ])
+
   const rainfall = await Promise.all([
-    Rainfall.create({value: 20}),
-    Rainfall.create({value: 10}),
-    Rainfall.create({value: 50}),
-    Rainfall.create({value: 70}),
-    Rainfall.create({value: 90})
+    Rainfall.create({value: 20, month: 'February'}),
+    Rainfall.create({value: 30, month: 'March'}),
+    Rainfall.create({value: 40, month: 'April'}),
+    Rainfall.create({value: 50, month: 'May'}),
+    Rainfall.create({value: 60, month: 'June'})
   ])
 
   console.log(`seeded ${users.length} users`)
-  console.log(`seeded ${rainfall.length} rainfall values`)
+  console.log(`seeded ${rainfall1.length + rainfall.length} rainfall values`)
   console.log(`seeded successfully`)
 }
 
