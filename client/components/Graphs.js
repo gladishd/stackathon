@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import { fetchData } from '../redux/graphs'
+import {fetchData} from '../store'
+import store from '../store'
 import {Line, Pie, Doughnut} from 'react-chartjs-2'
 
 export class Graphs extends React.Component {
@@ -17,7 +18,7 @@ export class Graphs extends React.Component {
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
-            data: [65, 59, 80, 81, 56]
+            data: []
           }
         ]
       },
@@ -40,7 +41,7 @@ export class Graphs extends React.Component {
               '#003350',
               '#35014F'
             ],
-            data: [65, 59, 80, 81, 56]
+            data: []
           }
         ]
       }
@@ -48,14 +49,21 @@ export class Graphs extends React.Component {
     this.handleClick = this.handleClick.bind(this)
   }
   componentDidMount() {
-    console.log('did we get here')
-    // this.props.getGraphs();
+    this.props.fetchGraphs()
   }
   handleClick(e) {
     e.preventDefault()
     this.props.history.push(`/graphs/${e.target.id}`)
   }
   render() {
+    let reduxState = store.getState()
+    let newArr = []
+    for (let i = 0; i < reduxState.rainfall.length; i++) {
+      newArr.push(reduxState.rainfall[i].value)
+    }
+    let {data1, data2} = this.state
+    data1.datasets[0].data = newArr
+    data2.datasets[0].data = newArr
     return (
       <div>
         hello world
@@ -112,13 +120,15 @@ export class Graphs extends React.Component {
 }
 
 const mapStateToProps = state => {
-  // return { graphs: state.graphs };
+  return {graphs: state}
 }
 
 const mapDispatchToProps = dispatch => {
-  // return {
-  //   fetchGraphs: () => { dispatch(fetchData()) },
-  // };
+  return {
+    fetchGraphs: () => {
+      dispatch(fetchData())
+    }
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Graphs)
