@@ -136,11 +136,7 @@ export class Graphs extends React.Component {
             backgroundColor: 'Green',
             borderColor: 'Green',
             borderWidth: 1,
-            data: [
-              {x: 5, y: 10, r: 10},
-              {x: 15, y: 3, r: 15},
-              {x: 7, y: 15, r: 30}
-            ],
+            data: [],
             hoverBackgroundColor: 'Green',
             hoverBorderColor: 'Green',
             hoverBorderWidth: 3,
@@ -166,7 +162,7 @@ export class Graphs extends React.Component {
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
             pointHoverBorderWidth: 15,
-            data: [{x: -8, y: 5}, {x: 5, y: 8}, {x: 10, y: 5}]
+            data: []
           }
         ]
       }
@@ -188,7 +184,17 @@ export class Graphs extends React.Component {
       values.push(reduxState.rainfall[i].value)
       months.push(reduxState.rainfall[i].month)
     }
-    let {data1, data2, data, dataRadar, dataPolar} = this.state
+    console.log(values)
+    console.log(months)
+    let {
+      data1,
+      data2,
+      data,
+      dataRadar,
+      dataPolar,
+      dataScatter,
+      dataBubble
+    } = this.state
     data1.datasets[0].data = values
     data2.datasets[0].data = values
     data.datasets[0].data = values
@@ -199,6 +205,31 @@ export class Graphs extends React.Component {
     data.labels = months
     dataRadar.labels = months
     dataPolar.labels = months
+    let allMonthList = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]
+    let numericMonths = months.map(month => allMonthList.indexOf(month))
+    let dataScatterBubble = []
+    for (let i = 0; i < values.length; i++) {
+      dataScatterBubble[i] = {
+        x: Number(`${values[i]}`),
+        y: Number(`${numericMonths[i]}`),
+        r: 10
+      }
+    }
+    dataScatter.datasets[0].data = dataScatterBubble
+    dataBubble.datasets[0].data = dataScatterBubble
     return (
       <div>
         hello world
