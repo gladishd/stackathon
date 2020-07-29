@@ -2,7 +2,16 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {fetchData} from '../store'
 import store from '../store'
-import {Line, Pie, Doughnut, Bar, Radar, Polar} from 'react-chartjs-2'
+import {
+  Line,
+  Pie,
+  Doughnut,
+  Bar,
+  Radar,
+  Polar,
+  Bubble,
+  Scatter
+} from 'react-chartjs-2'
 
 export class Graphs extends React.Component {
   constructor(props) {
@@ -120,6 +129,46 @@ export class Graphs extends React.Component {
           }
         ],
         labels: []
+      },
+      dataBubble: {
+        datasets: [
+          {
+            backgroundColor: 'Green',
+            borderColor: 'Green',
+            borderWidth: 1,
+            data: [
+              {x: 5, y: 10, r: 10},
+              {x: 15, y: 3, r: 15},
+              {x: 7, y: 15, r: 30}
+            ],
+            hoverBackgroundColor: 'Green',
+            hoverBorderColor: 'Green',
+            hoverBorderWidth: 3,
+            hoverRadius: 3,
+            hitRadius: 5,
+            label: 'Average Rainfall per month',
+            pointStyle: 'star',
+            rotation: 0,
+            radius: 3
+          }
+        ]
+      },
+      dataScatter: {
+        datasets: [
+          {
+            label: 'Average Rainfall per month',
+            fill: false,
+            lineTension: 0.5,
+            backgroundColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: 'rgba(0, 255, 100, 0.6)',
+            hoverBorderColor: 'rgba(255, 155, 100, 1)',
+            pointRadius: 15,
+            borderColor: 'rgba(0,0,0,1)',
+            borderWidth: 2,
+            pointHoverBorderWidth: 15,
+            data: [{x: -8, y: 5}, {x: 5, y: 8}, {x: 10, y: 5}]
+          }
+        ]
       }
     }
     this.handleClick = this.handleClick.bind(this)
@@ -204,6 +253,10 @@ export class Graphs extends React.Component {
 
           <Radar data={this.state.dataRadar} />
           <Polar data={this.state.dataPolar} />
+
+          <Bubble data={this.state.dataBubble} />
+
+          <Scatter data={this.state.dataScatter} />
         </div>
       </div>
     )
