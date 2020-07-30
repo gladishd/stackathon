@@ -12,25 +12,44 @@ async function seed() {
     User.create({email: 'murphy@email.com', password: '123'})
   ])
   const rainfall1 = await Promise.all([
-    Rainfall.create({value: 84, month: "July '19"})
+    Rainfall.create({value: 84, month: "July '19", source: 'Source 1'})
   ])
 
   const rainfall = await Promise.all([
-    Rainfall.create({value: 132.7, month: "August '19"}),
-    Rainfall.create({value: 126, month: "September '19"}),
-    Rainfall.create({value: 139.8, month: "October '19"}),
-    Rainfall.create({value: 118.9, month: "November '19"}),
-    Rainfall.create({value: 139.7, month: "December '19"}),
-    Rainfall.create({value: 121.7, month: "January '20"}),
-    Rainfall.create({value: 209.1, month: "February '20"}),
-    Rainfall.create({value: 78, month: "March '20"}),
-    Rainfall.create({value: 29.1, month: "April '20"}),
-    Rainfall.create({value: 32.7, month: "May '20"}),
-    Rainfall.create({value: 105.7, month: "June '20"})
+    Rainfall.create({value: 132.7, month: "August '19", source: 'Source 1'}),
+    Rainfall.create({value: 126, month: "September '19", source: 'Source 1'}),
+    Rainfall.create({value: 139.8, month: "October '19", source: 'Source 1'}),
+    Rainfall.create({value: 118.9, month: "November '19", source: 'Source 1'}),
+    Rainfall.create({value: 139.7, month: "December '19", source: 'Source 1'}),
+    Rainfall.create({value: 121.7, month: "January '20", source: 'Source 1'}),
+    Rainfall.create({value: 209.1, month: "February '20", source: 'Source 1'}),
+    Rainfall.create({value: 78, month: "March '20", source: 'Source 1'}),
+    Rainfall.create({value: 29.1, month: "April '20", source: 'Source 1'}),
+    Rainfall.create({value: 32.7, month: "May '20", source: 'Source 1'}),
+    Rainfall.create({value: 105.7, month: "June '20", source: 'Source 1'})
+  ])
+
+  const rainfallSource2 = await Promise.all([
+    Rainfall.create({value: 89, month: "July '19", source: 'Source 2'}),
+    Rainfall.create({value: 122.7, month: "August '19", source: 'Source 2'}),
+    Rainfall.create({value: 146, month: "September '19", source: 'Source 2'}),
+    Rainfall.create({value: 119.8, month: "October '19", source: 'Source 2'}),
+    Rainfall.create({value: 110.9, month: "November '19", source: 'Source 2'}),
+    Rainfall.create({value: 133.7, month: "December '19", source: 'Source 2'}),
+    Rainfall.create({value: 191.7, month: "January '20", source: 'Source 2'}),
+    Rainfall.create({value: 239.1, month: "February '20", source: 'Source 2'}),
+    Rainfall.create({value: 40, month: "March '20", source: 'Source 2'}),
+    Rainfall.create({value: 58.1, month: "April '20", source: 'Source 2'}),
+    Rainfall.create({value: 58.7, month: "May '20", source: 'Source 2'}),
+    Rainfall.create({value: 100.7, month: "June '20", source: 'Source 2'})
   ])
 
   console.log(`seeded ${users.length} users`)
-  console.log(`seeded ${rainfall1.length + rainfall.length} rainfall values`)
+  console.log(
+    `seeded ${rainfall1.length +
+      rainfall.length +
+      rainfallSource2.length} rainfall values`
+  )
   console.log(`seeded successfully`)
 }
 

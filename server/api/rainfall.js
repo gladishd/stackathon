@@ -5,7 +5,7 @@ module.exports = router
 router.get('/', async (req, res, next) => {
   try {
     const rainfallValues = await Rainfall.findAll({
-      attributes: ['value', 'month']
+      attributes: ['value', 'month', 'source']
     })
     res.json(rainfallValues)
   } catch (err) {

@@ -45,7 +45,14 @@ export class Graphs extends React.Component {
               '#C9DE00',
               '#2FDE00',
               '#00A6B4',
-              '#6800B4'
+              '#6800B4',
+              '#a75298',
+              '#a77c52',
+              '#16e3cc',
+              '#b69edb',
+              '#a5a01d',
+              '#fc737a',
+              '#b9b6b6'
             ],
             hoverBackgroundColor: [
               '#501800',
@@ -70,7 +77,12 @@ export class Graphs extends React.Component {
               'rgba(75, 192, 192, 0.2)',
               'rgba(54, 162, 235, 0.2)',
               'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
+              'rgba(201, 203, 207, 0.2)',
+              '#B21F00',
+              '#C9DE00',
+              '#2FDE00',
+              '#00A6B4',
+              '#6800B4'
             ],
             borderColor: [
               'rgb(255, 99, 132)',
@@ -124,7 +136,13 @@ export class Graphs extends React.Component {
               'rgb(255, 205, 86)',
               'rgb(201, 23, 207)',
               'rgb(54, 162, 235)',
-              'rgb(150, 2, 255)'
+              'rgb(150, 2, 255)',
+              '#B21F00',
+              '#C9DE00',
+              '#2FDE00',
+              '#00A6B4',
+              '#6800B4',
+              '#85e0ea'
             ]
           }
         ],
@@ -177,9 +195,24 @@ export class Graphs extends React.Component {
     this.props.history.push(`/graphs/${e.target.id}`)
   }
   render() {
-    let values = []
-    let months = []
+    let valuesSource1 = []
+    let valuesSource2 = []
+
+    let monthsSource1 = []
+    let monthsSource2 = []
     let reduxState = store.getState()
+    let sourceOneOnly = {}
+    let sourceTwoOnly = {}
+
+    if (reduxState.rainfall[0]) {
+      sourceOneOnly = reduxState.rainfall.filter(
+        element => element.source === 'Source 1'
+      )
+      sourceTwoOnly = reduxState.rainfall.filter(
+        element => element.source === 'Source 2'
+      )
+    }
+    // console.log(reduxState.rainfall[0] && reduxState.rainfall[0].source);
     let {
       lineData,
       pieDoughnutData,
@@ -203,17 +236,24 @@ export class Graphs extends React.Component {
       'November',
       'December'
     ]
-    for (let i = 0; i < reduxState.rainfall.length; i++) {
-      values.push(reduxState.rainfall[i].value)
-      months.push(reduxState.rainfall[i].month)
+    for (let i = 0; i < sourceOneOnly.length; i++) {
+      valuesSource1.push(sourceOneOnly[i].value)
+      monthsSource1.push(sourceOneOnly[i].month)
     }
-    lineData.datasets[0].data = pieDoughnutData.datasets[0].data = barData.datasets[0].data = dataRadar.datasets[0].data = dataPolar.datasets[0].data = values
-    lineData.labels = pieDoughnutData.labels = barData.labels = dataRadar.labels = dataPolar.labels = months
-    let numericMonths = months.map(month => allMonthList.indexOf(month))
+    for (let i = 0; i < sourceTwoOnly.length; i++) {
+      valuesSource2.push(sourceTwoOnly[i].value)
+      monthsSource2.push(sourceTwoOnly[i].month)
+    }
+    lineData.datasets[0].data = pieDoughnutData.datasets[0].data = barData.datasets[0].data = dataRadar.datasets[0].data = dataPolar.datasets[0].data = valuesSource1
+    dataRadar.datasets[1].data = valuesSource2
+    lineData.labels = pieDoughnutData.labels = barData.labels = dataRadar.labels = dataPolar.labels = monthsSource1
+    let numericMonths = monthsSource1
+      .map(element => element.split(' ')[0])
+      .map(month => allMonthList.indexOf(month))
     let dataScatterBubble = []
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < valuesSource1.length; i++) {
       dataScatterBubble[i] = {
-        x: Number(`${values[i]}`),
+        x: Number(`${valuesSource1[i]}`),
         y: Number(`${numericMonths[i]}`),
         r: 10
       }

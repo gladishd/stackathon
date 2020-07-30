@@ -7,6 +7,9 @@ const Rainfall = db.define('rainfall', {
   },
   month: {
     type: Sequelize.STRING
+  },
+  source: {
+    type: Sequelize.STRING
   }
 })
 
