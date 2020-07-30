@@ -103,7 +103,7 @@ export class Graphs extends React.Component {
         datasets: [
           {
             data: [],
-            label: 'Source 1',
+            label: 'U.K. (Statista)',
             fill: true,
             backgroundColor: 'rgba(250, 99, 132, 0.2)',
             borderColor: 'rgb(250, 99, 132)',
@@ -114,7 +114,7 @@ export class Graphs extends React.Component {
           },
           {
             data: [],
-            label: 'Source 2',
+            label: 'Contiguous U.S. (NOAA)',
             fill: true,
             backgroundColor: 'rgba(25, 99, 132, 0.2)',
             borderColor: 'rgb(25, 99, 132)',
@@ -206,10 +206,10 @@ export class Graphs extends React.Component {
 
     if (reduxState.rainfall[0]) {
       sourceOneOnly = reduxState.rainfall.filter(
-        element => element.source === 'Source 1'
+        element => element.source === 'U.K. (Statista)'
       )
       sourceTwoOnly = reduxState.rainfall.filter(
-        element => element.source === 'Source 2'
+        element => element.source === 'Contiguous U.S. (NOAA)'
       )
     }
     // console.log(reduxState.rainfall[0] && reduxState.rainfall[0].source);
@@ -244,8 +244,8 @@ export class Graphs extends React.Component {
       valuesSource2.push(sourceTwoOnly[i].value)
       monthsSource2.push(sourceTwoOnly[i].month)
     }
-    lineData.datasets[0].data = pieDoughnutData.datasets[0].data = barData.datasets[0].data = dataRadar.datasets[0].data = dataPolar.datasets[0].data = valuesSource1
-    dataRadar.datasets[1].data = valuesSource2
+    lineData.datasets[0].data = pieDoughnutData.datasets[0].data = barData.datasets[0].data = dataRadar.datasets[1].data = dataPolar.datasets[0].data = valuesSource2
+    dataRadar.datasets[0].data = valuesSource1
     lineData.labels = pieDoughnutData.labels = barData.labels = dataRadar.labels = dataPolar.labels = monthsSource1
     let numericMonths = monthsSource1
       .map(element => element.split(' ')[0])
@@ -253,8 +253,8 @@ export class Graphs extends React.Component {
     let dataScatterBubble = []
     for (let i = 0; i < valuesSource1.length; i++) {
       dataScatterBubble[i] = {
-        x: Number(`${valuesSource1[i]}`),
-        y: Number(`${numericMonths[i]}`),
+        x: Number(`${numericMonths[i]}`),
+        y: Number(`${valuesSource1[i]}`),
         r: 10
       }
     }
