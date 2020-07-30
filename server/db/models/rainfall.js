@@ -3,7 +3,7 @@ const db = require('../db')
 
 const Rainfall = db.define('rainfall', {
   value: {
-    type: Sequelize.INTEGER
+    type: Sequelize.FLOAT
   },
   month: {
     type: Sequelize.STRING

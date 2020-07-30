@@ -21,7 +21,7 @@ export class Graphs extends React.Component {
         labels: [],
         datasets: [
           {
-            label: 'Rainfall',
+            label: 'millimeters',
             fill: false,
             lineTension: 0.5,
             backgroundColor: 'rgba(75,192,192,1)',
@@ -39,7 +39,7 @@ export class Graphs extends React.Component {
         labels: [],
         datasets: [
           {
-            label: 'Rainfall',
+            label: 'millimeters',
             backgroundColor: [
               '#B21F00',
               '#C9DE00',
@@ -62,7 +62,7 @@ export class Graphs extends React.Component {
         datasets: [
           {
             data: [],
-            label: 'Average Rainfall per month',
+            label: 'millimeters',
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -116,7 +116,7 @@ export class Graphs extends React.Component {
       dataPolar: {
         datasets: [
           {
-            label: 'My First Dataset',
+            label: 'millimeters',
             data: [],
             backgroundColor: [
               'rgb(200, 200, 200)',
@@ -142,7 +142,7 @@ export class Graphs extends React.Component {
             hoverBorderWidth: 3,
             hoverRadius: 3,
             hitRadius: 5,
-            label: 'Average Rainfall per month',
+            label: 'millimeters',
             pointStyle: 'star',
             rotation: 0,
             radius: 3
@@ -152,7 +152,7 @@ export class Graphs extends React.Component {
       dataScatter: {
         datasets: [
           {
-            label: 'Average Rainfall per month',
+            label: 'millimeters',
             fill: false,
             lineTension: 0.5,
             backgroundColor: 'rgba(75,192,192,1)',
@@ -226,7 +226,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -241,7 +241,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -256,7 +256,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -271,7 +271,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -286,7 +286,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -301,7 +301,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -316,7 +316,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
@@ -331,7 +331,7 @@ export class Graphs extends React.Component {
           options={{
             title: {
               display: true,
-              text: 'Average Rainfall per month',
+              text: 'Total Rainfall per month',
               fontSize: 20
             },
             legend: {
