@@ -17,7 +17,7 @@ export class Graphs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data1: {
+      lineData: {
         labels: [],
         datasets: [
           {
@@ -35,7 +35,7 @@ export class Graphs extends React.Component {
           }
         ]
       },
-      data2: {
+      pieDoughnutData: {
         labels: [],
         datasets: [
           {
@@ -58,7 +58,7 @@ export class Graphs extends React.Component {
           }
         ]
       },
-      data: {
+      barData: {
         datasets: [
           {
             data: [],
@@ -177,34 +177,18 @@ export class Graphs extends React.Component {
     this.props.history.push(`/graphs/${e.target.id}`)
   }
   render() {
-    let reduxState = store.getState()
     let values = []
     let months = []
-    for (let i = 0; i < reduxState.rainfall.length; i++) {
-      values.push(reduxState.rainfall[i].value)
-      months.push(reduxState.rainfall[i].month)
-    }
-    console.log(values)
-    console.log(months)
+    let reduxState = store.getState()
     let {
-      data1,
-      data2,
-      data,
+      lineData,
+      pieDoughnutData,
+      barData,
       dataRadar,
       dataPolar,
       dataScatter,
       dataBubble
     } = this.state
-    data1.datasets[0].data = values
-    data2.datasets[0].data = values
-    data.datasets[0].data = values
-    dataRadar.datasets[0].data = values
-    dataPolar.datasets[0].data = values
-    data1.labels = months
-    data2.labels = months
-    data.labels = months
-    dataRadar.labels = months
-    dataPolar.labels = months
     let allMonthList = [
       'January',
       'February',
@@ -219,6 +203,12 @@ export class Graphs extends React.Component {
       'November',
       'December'
     ]
+    for (let i = 0; i < reduxState.rainfall.length; i++) {
+      values.push(reduxState.rainfall[i].value)
+      months.push(reduxState.rainfall[i].month)
+    }
+    lineData.datasets[0].data = pieDoughnutData.datasets[0].data = barData.datasets[0].data = dataRadar.datasets[0].data = dataPolar.datasets[0].data = values
+    lineData.labels = pieDoughnutData.labels = barData.labels = dataRadar.labels = dataPolar.labels = months
     let numericMonths = months.map(month => allMonthList.indexOf(month))
     let dataScatterBubble = []
     for (let i = 0; i < values.length; i++) {
@@ -228,67 +218,128 @@ export class Graphs extends React.Component {
         r: 10
       }
     }
-    dataScatter.datasets[0].data = dataScatterBubble
-    dataBubble.datasets[0].data = dataScatterBubble
+    dataScatter.datasets[0].data = dataBubble.datasets[0].data = dataScatterBubble
     return (
       <div>
-        hello world
-        <div>
-          <Line
-            data={this.state.data1}
-            options={{
-              title: {
-                display: true,
-                text: 'Average Rainfall per month',
-                fontSize: 20
-              },
-              legend: {
-                display: true,
-                position: 'right'
-              }
-            }}
-          />
-        </div>
-        <div>
-          <Pie
-            data={this.state.data2}
-            options={{
-              title: {
-                display: true,
-                text: 'Average Rainfall per month',
-                fontSize: 20
-              },
-              legend: {
-                display: true,
-                position: 'right'
-              }
-            }}
-          />
+        <Line
+          data={this.state.lineData}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
 
-          <Doughnut
-            data={this.state.data2}
-            options={{
-              title: {
-                display: true,
-                text: 'Average Rainfall per month',
-                fontSize: 20
-              },
-              legend: {
-                display: true,
-                position: 'right'
-              }
-            }}
-          />
+        <Pie
+          data={this.state.pieDoughnutData}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
 
-          <Bar data={this.state.data} />
+        <Doughnut
+          data={this.state.pieDoughnutData}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
 
-          <Radar data={this.state.dataRadar} />
-          <Polar data={this.state.dataPolar} />
+        <Bar
+          data={this.state.barData}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
 
-          <Bubble data={this.state.dataBubble} />
+        <Radar
+          data={this.state.dataRadar}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
 
-          <Scatter data={this.state.dataScatter} />
-        </div>
+        <Polar
+          data={this.state.dataPolar}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
+
+        <Bubble
+          data={this.state.dataBubble}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
+
+        <Scatter
+          data={this.state.dataScatter}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Rainfall per month',
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
       </div>
     )
   }
