@@ -8,3 +8,10 @@ export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
 
 export {default as Graphs} from './Graphs'
+export {default as HowlComp} from './HowlComp'
+
+// so that we can say
+// import { Main } from './components';
+// instead of
+// import { Main } from './components/Main;
+export {default as Main} from './Main'

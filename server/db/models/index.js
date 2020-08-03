@@ -1,6 +1,28 @@
 const User = require('./user')
 const Rainfall = require('./rainfall')
 
+const Message = require('./message')
+const Channel = require('./channel')
+const Author = require('./author')
+
+Channel.hasMany(Message, {
+  onDelete: 'cascade',
+  hooks: true
+})
+
+Author.hasMany(Message)
+
+Message.belongsTo(Channel)
+Message.belongsTo(Author)
+
+module.exports = {
+  Channel,
+  Message,
+  Author,
+  User,
+  Rainfall
+}
+
 /**
  * If we had any associations to make, this would be a great place to put them!
  * ex. if we had another model called BlogPost, we might say:
@@ -14,7 +36,3 @@ const Rainfall = require('./rainfall')
  * for example, we can say: const {User} = require('../db/models')
  * instead of: const User = require('../db/models/user')
  */
-module.exports = {
-  User,
-  Rainfall
-}
