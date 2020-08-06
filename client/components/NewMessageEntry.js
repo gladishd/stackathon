@@ -1,14 +1,39 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { writeMessage, postNewMessageEntry } from '../store/store.js';
+class NewMessageEntry extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange(event) {
 
-export default class NewMessageEntry extends Component {
+    this.props.write(event.target.value);
+  }
+  handleSubmit(evt) {
+    evt.preventDefault(); // don't forget to preventDefault!
+    // our message content is on our state, which we're getting from our Redux store
+    console.log(this.props)
+    const content = this.props.newMessageEntry;
+
+    // our channelId is available from the props sent by MessagesList, which it receives as props from the Route!
+    const channelId = this.props.channelId;
+
+
+    this.props.post({ content, channelId });
+  }
   render() {
+
     return (
-      <form id="new-message-form">
+      <form id="new-message-form" onSubmit={this.handleSubmit}>
         <div className="input-group input-group-lg">
           <input
             className="form-control"
             type="text"
             name="content"
+            value={this.props.newMessageEntry}
+            onChange={this.handleChange}
             placeholder="Say something nice..."
           />
           <span className="input-group-btn">
@@ -18,6 +43,21 @@ export default class NewMessageEntry extends Component {
           </span>
         </div>
       </form>
-    )
+    );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    newMessageEntry: state.addMessages.newMessageEntry,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    write: (string) => dispatch(writeMessage(string)),
+    post: (message) => dispatch(postNewMessageEntry(message)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry);
