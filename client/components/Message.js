@@ -7,7 +7,7 @@ export default function Message(props) {
     <li className="media">
       <div className="media-left">
         <a href="#">
-          <img
+          <img style={{ 'width': '10%' }}
             className="media-object"
             src={message.author.image}
             alt="image"
