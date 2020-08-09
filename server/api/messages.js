@@ -1,11 +1,12 @@
 const router = require('express').Router()
-const {Message, Author} = require('../db/models')
+const { Message, Author } = require('../db/models')
 
 module.exports = router
 
 // GET /api/messages
 router.get('/', async (req, res, next) => {
   try {
+    console.log('did we reach the get api route')
     const messages = await Message.findAll()
     res.json(messages)
   } catch (err) {
@@ -18,14 +19,16 @@ router.post('/', async (req, res, next) => {
   // We don't have proper users yet (we'll get there soon, though!).
   // Instead, we'll findOrCreate an author by name, for simplicity.
   // Of course, you wouldn't want to do this in a real chat app!
+  console.log('do we reach the post route')
   try {
+    console.log('the req.body object is ', req.body)
     const [author] = await Author.findOrCreate({
       where: {
         name: req.body.name || 'Cody'
       }
     })
     const message = Message.build(req.body)
-    message.setAuthor(author, {save: false})
+    message.setAuthor(author, { save: false })
     await message.save()
     const returnMessage = message.toJSON()
     returnMessage.author = author
@@ -51,7 +54,7 @@ router.put('/:messageId', async (req, res, next) => {
 router.delete('/:messageId', async (req, res, next) => {
   try {
     const id = req.params.messageId
-    await Message.destroy({where: {id}})
+    await Message.destroy({ where: { id } })
     res.status(204).end()
   } catch (err) {
     next(err)

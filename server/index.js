@@ -6,7 +6,7 @@ const session = require('express-session')
 const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
-const sessionStore = new SequelizeStore({db})
+const sessionStore = new SequelizeStore({ db })
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
@@ -46,7 +46,7 @@ const createApp = () => {
 
   // body parsing middleware
   app.use(express.json())
-  app.use(express.urlencoded({extended: true}))
+  app.use(express.urlencoded({ extended: true }))
 
   // compression middleware
   app.use(compression())
@@ -57,15 +57,30 @@ const createApp = () => {
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
       store: sessionStore,
       resave: false,
-      saveUninitialized: false
+      saveUninitialized: false // don't need automatic session creation
     })
   )
+
+  // place right after the session setup middleware
+  app.use((req, res, next) => {
+    console.log('SESSION: ', req.session)
+    next()
+  })
+
+  app.use((req, res, next) => {
+    if (!req.session.counter) req.session.counter = 0
+    console.log('counter', ++req.session.counter) // increment THEN log
+    next() // needed to continue through express middleware
+  });
+
   app.use(passport.initialize())
   app.use(passport.session())
 
   // auth and api routes
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
+
+
 
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
@@ -85,6 +100,8 @@ const createApp = () => {
   app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
+
+
 
   // error handling endware
   app.use((err, req, res, next) => {

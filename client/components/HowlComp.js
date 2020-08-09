@@ -1,5 +1,5 @@
 import React from 'react'
-import {Howl, Howler} from 'howler'
+import { Howl, Howler } from 'howler'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,12 +13,10 @@ class App extends React.Component {
       src: ['/space_sound.wav']
     })
     Sounds.play()
-    console.log('sound')
   }
   Radio = () => {
     let play = this.state.play
-    this.setState({play: !play})
-    console.log(play)
+    this.setState({ play: !play })
     var stream = new Howl({
       src: [
         'http://prclive1.listenon.in:9960/?fbclid=IwAR1bAO9Hf-yvOGrjKVVdYt0XXnqo85o1G2IXWrzVtjIujOit5JqW7oQUtfI'

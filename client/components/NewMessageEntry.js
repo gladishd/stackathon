@@ -20,10 +20,14 @@ class NewMessageEntry extends Component {
     // our channelId is available from the props sent by MessagesList, which it receives as props from the Route!
     const channelId = this.props.channelId;
 
+    const userEmail = this.props.userEmail;
 
-    this.props.post({ content, channelId });
+
+    this.props.post({ content, channelId, name: userEmail });
   }
   render() {
+
+    console.log('the state in general, on the NewMessageEntry component, is ', this.props.state)
 
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>
@@ -50,6 +54,10 @@ class NewMessageEntry extends Component {
 const mapStateToProps = (state) => {
   return {
     newMessageEntry: state.addMessages.newMessageEntry,
+    isLoggedIn: !!state.user.id,
+    userId: state.user.id,
+    userEmail: state.user.email,
+    googleId: state.user.googleId
   };
 };
 
