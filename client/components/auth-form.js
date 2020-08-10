@@ -1,17 +1,25 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
+import { auth } from '../store'
 
 /**
  * COMPONENT
  */
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+  const { name, displayName, handleSubmit, error } = props
   return (
     <div>
       <form onSubmit={handleSubmit} name={name}>
         <div>
+          <label htmlFor="displayImage">
+            <small>Display Image</small>
+          </label>
+          <input name="displayImage" type="text" />
+          <label htmlFor="displayName">
+            <small>Display Name</small>
+          </label>
+          <input name="displayName" type="text" />
           <label htmlFor="email">
             <small>Email</small>
           </label>
@@ -63,7 +71,10 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      const displayName = evt.target.displayName.value
+      const displayImage = evt.target.displayImage.value
+      dispatch(auth(displayName, displayImage, email, password, formName))
+      // the order of dispatch matters here, and has to correspond to the order in the database
     }
   }
 }

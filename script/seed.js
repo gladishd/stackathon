@@ -103,8 +103,8 @@ async function seed() {
     );
 
   const users = await Promise.all([
-    User.create({ email: 'cody@email.com', password: '123' }),
-    User.create({ email: 'murphy@email.com', password: '123' })
+    User.create({ email: 'cody@email.com', password: '123', displayName: 'display name 1', displayImage: 'sample image url' }),
+    User.create({ email: 'murphy@email.com', password: '123', displayName: 'display name 2', displayImage: 'sample display image 2' })
   ])
   const rainfall1 = await Promise.all([
     Rainfall.create({ value: 84, month: "July '19", source: 'U.K. (Statista)' })
