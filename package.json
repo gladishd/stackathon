@@ -1,7 +1,7 @@
 {
-  "name": "charts",
+  "name": "stackathon",
   "version": "2.0.0",
-  "description": "Dean's project, sprung up from the boilerplate",
+  "description": "Stackathon Project for Fullstack Academy",
   "engines": {
     "node": "~12.11.1"
   },
