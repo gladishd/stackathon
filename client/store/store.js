@@ -48,7 +48,7 @@ export const postNewMessageEntry = (messagePost) => {
   // the inner function is our 'thunk'
   return async (dispatch) => {
     console.log('the message post sent to the thunk is ', messagePost)
-    const response = await axios.post('/api/messages', messagePost);
+    const response = await axios.post('/api/messages', messagePost); // this is where the image is decided
     console.log('the response sent back from the server is, ', response)
     const message = response.data;
     const action = gotNewMessageFromServer(message);

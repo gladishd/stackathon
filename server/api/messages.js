@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Message, Author } = require('../db/models')
+const { Message, Author, User } = require('../db/models')
 
 module.exports = router
 
@@ -22,9 +22,16 @@ router.post('/', async (req, res, next) => {
   console.log('do we reach the post route')
   try {
     console.log('the req.body object is ', req.body)
-    const [author] = await Author.findOrCreate({
+    const imageUrl = await User.findAll({
       where: {
-        name: req.body.name || 'Cody'
+        displayName: req.body.name
+      }
+    })
+
+    const [author] = await Author.findOrCreate({ // when we sign up, we want the author to already exist so that it doesn't create a new one with the default image.
+      where: {
+        name: req.body.name, // always req.body.name, not hardcoded here as was done before (name: req.body.name || 'Cody')
+        image: imageUrl[0].dataValues.displayImage
       }
     })
     const message = Message.build(req.body)

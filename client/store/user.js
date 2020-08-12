@@ -50,6 +50,7 @@ export const auth = (displayName, displayImage, email, password, method) => asyn
 
 export const logout = () => async dispatch => {
   try {
+    console.log('did we reach the logout thunk?')
     await axios.post('/auth/logout')
     dispatch(removeUser())
     history.push('/login')

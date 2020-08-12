@@ -1,4 +1,6 @@
 'use strict'
+const chalk = require('chalk')
+const faker = require('faker')
 
 const db = require('../server/db')
 const { User, Rainfall } = require('../server/db/models')
@@ -13,81 +15,49 @@ const channels = [
 ];
 
 const authors = [{
-  name: 'Cody',
-  image: '/images/cody.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
 }, {
-  name: 'Ben',
-  image: '/images/ben.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
 }, {
-  name: 'Star',
-  image: '/images/star.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
 }, {
-  name: 'Batman',
-  image: '/images/batman.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
 }, {
-  name: 'Elliott',
-  image: '/images/elliott.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
 }, {
-  name: 'Fira',
-  image: '/images/fira.jpg'
-}, {
-  name: 'Henry',
-  image: '/images/henry.jpg'
-}, {
-  name: 'Marcy',
-  image: '/images/marcy.jpg'
-}, {
-  name: 'Milton',
-  image: '/images/milton.jpg'
-}, {
-  name: 'Murphy',
-  image: '/images/murphy.jpg'
-}, {
-  name: 'Raffi',
-  image: '/images/raffi.jpg'
-}, {
-  name: 'Tulsi',
-  image: '/images/tulsi.jpg'
-}, {
-  name: 'Pork Chop',
-  image: '/images/pork_chop.jpg'
-}, {
-  name: 'Ribs',
-  image: '/images/ribs.jpg'
-}, {
-  name: 'Stacey',
-  image: '/images/stacey.jpg'
-}, {
-  name: 'JD',
-  image: '/images/jd.jpg'
-}, {
-  name: 'BenBen',
-  image: '/images/benben.png'
-}, {
-  name: 'Odie',
-  image: '/images/odie.jpg'
+  name: [faker.name.firstName(), faker.name.lastName()].join(' '),
+  image: faker.image.avatar()
+},
+{
+  name: 'Guest',
+  image: '/images/guest.jpeg'
 }];
 
 const id = () => Math.round(Math.random() * (authors.length - 1)) + 1;
 
 const messages = [
-  { authorId: id(), content: 'I like React!', channelId: 1 },
-  { authorId: id(), content: 'I like Redux!', channelId: 1 },
-  { authorId: id(), content: 'I like React-Redux!', channelId: 1 },
-  { authorId: id(), content: 'I like writing web apps!', channelId: 2 },
-  { authorId: id(), content: 'You should learn JavaScript!', channelId: 2 },
-  { authorId: id(), content: 'JavaScript is pretty great!', channelId: 2 },
-  { authorId: id(), content: 'Dogs are great!', channelId: 3 },
-  { authorId: id(), content: 'Cats are also great!', channelId: 3 },
-  { authorId: id(), content: 'Why must we fight so?', channelId: 3 },
-  { authorId: id(), content: 'I want to get tacos!', channelId: 4 },
-  { authorId: id(), content: 'I want to get salad!', channelId: 4 },
-  { authorId: id(), content: 'I want a taco salad!', channelId: 4 }
+  { authorId: id(), content: 'Don’t expect a formal university to teach you material applicable to practicing data science in industry. ', channelId: 1 },
+  { authorId: id(), content: 'Data science projects, blog posts, or Github repos can get you in the door for a job interview.', channelId: 1 },
+  { authorId: id(), content: 'Try a top-down approach to learning. Figure out what problems a technology or algorithm can solve before delving into the details of how the method works.', channelId: 1 },
+  { authorId: id(), content: 'Focus on building a portfolio, composed of real-world data science projects, to demonstrate your technical skills. ', channelId: 2 },
+  { authorId: id(), content: 'Make learning data science fun by working on projects that personally interest you or solve a problem you or others around you have. ', channelId: 2 },
+  { authorId: id(), content: 'Reading, whether technical or for personal learning, is part of a process of becoming less wrong about the world.', channelId: 2 },
+  { authorId: id(), content: 'Online courses, which are updated rapidly and often are developed with companies, are more efficient and cost-effective ways to learn the data science skills you need in industry.', channelId: 3 },
+  { authorId: id(), content: 'Try to choose books that teach you something and that you also find intriguing.', channelId: 3 },
+  { authorId: id(), content: 'I was motivated to keep learning data science not only because of the prospect it would earn me a good job but also because learning data science was inherently enjoyable.', channelId: 3 },
+  { authorId: id(), content: 'You come into a book with some background knowledge (priors), learn new information (gather data), and update your beliefs to more closely match reality (a posterior).', channelId: 4 },
+  { authorId: id(), content: 'Place emphasis on mastering skills instead of acquiring credentials, which don’t mean a lot in the data science industry.', channelId: 4 },
+  { authorId: id(), content: 'Technical and communication skills earn you the job (and continuing success throughout your career).', channelId: 4 }
 ];
 
 async function seed() {
   await db.sync({ force: true })
-  console.log('db synced!')
+  console.log(chalk.magentaBright('db synced!'))
 
   Promise.all(authors.map(author =>
     Author.create(author))
@@ -223,29 +193,29 @@ async function seed() {
     })
   ])
 
-  console.log(`seeded ${users.length} users`)
-  console.log(
+  console.log(chalk.yellow(`seeded ${users.length} users`))
+  console.log(chalk.cyan(
     `seeded ${rainfall1.length +
     rainfall.length +
     rainfallSource2.length} rainfall values`
-  )
-  console.log(`seeded successfully`)
+  ))
+  console.log(chalk.green(`seeded successfully`))
 }
 
 // We've separated the `seed` function from the `runSeed` function.
 // This way we can isolate the error handling and exit trapping.
 // The `seed` function is concerned only with modifying the database.
 async function runSeed() {
-  console.log('seeding...')
+  console.log(chalk.red('seeding...'))
   try {
     await seed()
   } catch (err) {
     console.error(err)
     process.exitCode = 1
   } finally {
-    console.log('closing db connection')
+    console.log(chalk.magenta('closing db connection'))
     await db.close()
-    console.log('db connection closed')
+    console.log(chalk.blue('db connection closed'))
   }
 }
 

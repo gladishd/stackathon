@@ -20,14 +20,16 @@ class NewMessageEntry extends Component {
     // our channelId is available from the props sent by MessagesList, which it receives as props from the Route!
     const channelId = this.props.channelId;
 
-    const userEmail = this.props.userEmail;
+    const name = this.props.reduxState.user.displayName || 'Guest'; // this should be by default.
+    // when the user logs in, their real name should be
+    // displayed.
 
 
-    this.props.post({ content, channelId, name: userEmail });
+    this.props.post({ content, channelId, name });
   }
   render() {
 
-    console.log('the state in general, on the NewMessageEntry component, is ', this.props.state)
+    console.log('the state in general, on the NewMessageEntry component, is ', this.props.reduxState)
 
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>
@@ -57,7 +59,8 @@ const mapStateToProps = (state) => {
     isLoggedIn: !!state.user.id,
     userId: state.user.id,
     userEmail: state.user.email,
-    googleId: state.user.googleId
+    googleId: state.user.googleId,
+    reduxState: state
   };
 };
 
