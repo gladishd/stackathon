@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchData } from '../store'
+import { postNewGraphData } from '../store/store.js'
 import store from '../store'
 import {
   Line,
@@ -215,7 +216,11 @@ export class Graphs extends React.Component {
     this.reRenderComponent = this.reRenderComponent.bind(this)
   }
   componentDidMount() {
-    this.props.fetchGraphs()
+    this.props.fetchGraphs();
+    this.props.post([1, 4, 1, 4], ["55", "59", "70", "55"])
+
+
+
   }
   handleClick(e) {
     e.preventDefault()
@@ -605,6 +610,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchGraphs: () => {
       dispatch(fetchData())
+    },
+    post: (data, labels) => {
+      dispatch(postNewGraphData(data, labels))
     }
   }
 }

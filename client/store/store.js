@@ -10,11 +10,13 @@ const middleware = applyMiddleware(thunkMiddleware);
 const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_SERVER';
 const WRITE_MESSAGE = 'WRITE_MESSAGE';
 const GOT_NEW_MESSAGE_FROM_SERVER = 'GOT_NEW_MESSAGE_FROM_SERVER';
+const POSTED_NEW_GRAPH_DATA = 'POSTED_NEW_GRAPH_DATA';
 
 // INITIAL STATE
 const initialState = {
   messages: [],
   newMessageEntry: '',
+  newGraphData: {}
 };
 
 // ACTION CREATORS
@@ -32,6 +34,11 @@ export const gotNewMessageFromServer = (newMessage) => ({
   type: GOT_NEW_MESSAGE_FROM_SERVER,
   newMessage,
 });
+
+export const postedNewGraphData = (data) => ({
+  type: POSTED_NEW_GRAPH_DATA,
+  data,
+})
 
 // thunk-creator is an action creator; our 'thunk creator'
 export const fetchMessages = () => {
@@ -57,6 +64,17 @@ export const postNewMessageEntry = (messagePost) => {
   };
 };
 
+export const postNewGraphData = (data, labels) => {
+  console.log('did we reach the postnew graph data thuhk?', data, labels)
+  return async (dispatch) => {
+    const response = await axios.post('/api/graphs', { data, labels })
+    console.log('within the postNewgraphData thunk, the response sent from the server was ,', response)
+    const action = postedNewGraphData(response.data);
+    dispatch(action);
+  }
+}
+
+
 // REDUCER
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -68,6 +86,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         messages: [...state.messages, action.newMessage],
+      };
+    case POSTED_NEW_GRAPH_DATA:
+      return {
+        ...state, newGraphData: action.data
       };
     default:
       return state;

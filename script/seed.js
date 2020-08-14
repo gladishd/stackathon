@@ -7,6 +7,7 @@ const { User, Rainfall } = require('../server/db/models')
 const Author = require('../server/db/models/author');
 const Message = require('../server/db/models/message');
 const Channel = require('../server/db/models/channel');
+const Graphs = require('../server/db/models/graphs');
 const channels = [
   { name: 'really_random' },
   { name: 'generally_speaking' },
@@ -191,6 +192,13 @@ async function seed() {
       month: "June '20",
       source: 'Contiguous U.S. (NOAA)'
     })
+  ])
+
+  const graphs = await Promise.all([
+    Graphs.create({
+      data: [0.88174, 0.78227, 0.50017, 0.7745099999999998, 0.62959, 0.8139299999999999, 0.79392, 0.63674, 0.5269400000000001],
+      labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"]
+    }),
   ])
 
   console.log(chalk.yellow(`seeded ${users.length} users`))

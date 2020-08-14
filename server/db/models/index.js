@@ -4,6 +4,7 @@ const Rainfall = require('./rainfall')
 const Message = require('./message')
 const Channel = require('./channel')
 const Author = require('./author')
+const Graphs = require('./Graphs')
 
 Channel.hasMany(Message, {
   onDelete: 'cascade',
@@ -20,7 +21,8 @@ module.exports = {
   Message,
   Author,
   User,
-  Rainfall
+  Rainfall,
+  Graphs // need to export it here so we can get it through the api request
 }
 
 /**
