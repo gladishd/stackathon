@@ -16,7 +16,7 @@ class NewMessageEntry extends Component {
   handleSubmit(evt) {
     evt.preventDefault(); // don't forget to preventDefault!
     // our message content is on our state, which we're getting from our Redux store
-    console.log(this.props)
+
     const content = this.props.newMessageEntry;
 
     // our channelId is available from the props sent by MessagesList, which it receives as props from the Route!
@@ -32,7 +32,7 @@ class NewMessageEntry extends Component {
   uploadImage(event) {
     event.preventDefault();
     var theFile = document.getElementById("imageUpload");
-    console.log(theFile)
+
   }
 
   loadFile(event) {
@@ -42,7 +42,7 @@ class NewMessageEntry extends Component {
 
   render() {
 
-    console.log('the state in general, on the NewMessageEntry component, is ', this.props.reduxState)
+
 
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>

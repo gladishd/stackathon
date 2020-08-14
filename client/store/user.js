@@ -34,7 +34,7 @@ export const me = () => async dispatch => {
 export const auth = (displayName, displayImage, email, password, method) => async dispatch => {
   let res
   try {
-    console.log("what are we posting when we create a new user? ", displayName, displayImage, email, password, method)
+
     res = await axios.post(`/auth/${method}`, { displayName, displayImage, email, password })
   } catch (authError) {
     return dispatch(getUser({ error: authError }))
@@ -50,7 +50,6 @@ export const auth = (displayName, displayImage, email, password, method) => asyn
 
 export const logout = () => async dispatch => {
   try {
-    console.log('did we reach the logout thunk?')
     await axios.post('/auth/logout')
     dispatch(removeUser())
     history.push('/login')

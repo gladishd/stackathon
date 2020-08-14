@@ -225,14 +225,8 @@ export class Graphs extends React.Component {
 
   reRenderComponent(e) {
     e.preventDefault()
-    console.log("rerendering!")
     this.setState({ dummyVariable: !this.state.dummyVariable })
-    // this.setState({
-    //   labelsArray: [],
-    //   dataArray: [],
-    // })
     this.props.getNewGraph();
-    console.log('within the reRenderComponent, the value of the redux state, located on graphs, is ', this.props.graphs)
   }
 
   async processFile() { // need to use arrow function to access this.state
@@ -252,21 +246,14 @@ export class Graphs extends React.Component {
         myReader.onload = async function (e) {
           var content = await myReader.result;
 
-          // console.log(content)
-
           //split csv file using "\n" for new line ( each row)
           // var lines = content[0].split("\r");
           var lines = content.split('\n')
-
-          // console.log(content, typeof content, )
-
-          // console.log(content.split('\n'))
 
           let optionsArray = content.split('\n')[0].split(',');
 
           for (let count = 1; count < 10; count++) {
             let singleRowContent = content.split('\n')[count].split(',')
-            console.log(singleRowContent)
             labelsArray.push(singleRowContent[optionsArray.indexOf('age')])
             dataArray.push(Number(singleRowContent[optionsArray.indexOf('hui3_score')]))
           }
@@ -307,26 +294,6 @@ export class Graphs extends React.Component {
         //call file reader onload
         await myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
         this.setState({ dataArray: dataArray, labelsArray: labelsArray })
-        this.setState({
-          generatedGraph: {
-            labels: labelsArray,
-            datasets: [
-              {
-                label: dataArray[0],
-                fill: false,
-                lineTension: 0.5,
-                backgroundColor: 'rgba(75,102,192,1)',
-                pointBackgroundColor: 'rgba(0, 205, 100, 0.6)',
-                hoverBorderColor: 'rgba(205, 255, 0, 1)',
-                pointRadius: 15,
-                borderColor: 'rgba(0,0,0,1)',
-                borderWidth: 2,
-                pointHoverBorderWidth: 15,
-                data: dataArray
-              }
-            ]
-          }
-        });
       }
       else {
         alert("This browser does not support HTML5.");
@@ -336,10 +303,6 @@ export class Graphs extends React.Component {
     else {
       alert("Please upload a valid CSV file.");
     }
-
-    console.log(dataArray, labelsArray)
-    this.props.post(dataArray, labelsArray)
-
     return false;
   }
 
@@ -348,9 +311,7 @@ export class Graphs extends React.Component {
 
   // eslint-disable-next-line max-statements
   render() {
-    console.log("did we re-render?")
 
-    console.log('the current value of this.state is, ', this.state)
 
     let valuesSource1 = []
     let valuesSource2 = []
@@ -369,7 +330,6 @@ export class Graphs extends React.Component {
         element => element.source === 'Contiguous U.S. (NOAA)'
       )
     }
-    // console.log(reduxState.rainfall[0] && reduxState.rainfall[0].source);
     let {
       lineData,
       pieDoughnutData,
@@ -417,14 +377,16 @@ export class Graphs extends React.Component {
     }
     dataScatter.datasets[0].data = dataBubble.datasets[0].data = dataScatterBubble
 
-    console.log('this.state.dataArray is currently ', this.state.dataArray, 'and this.state.labelsArray is currently, ', this.state.labelsArray)
     // const { labelsArray, dataArray } = this.state;
     let labelsArray = [];
     let dataArray = []
     let theLabel = 'somethingsomething'
     labelsArray = this.state.labelsArray
     dataArray = this.state.dataArray
-    this.props.post(dataArray, labelsArray)
+    if (dataArray && labelsArray) {
+      this.props.post(dataArray, labelsArray)
+    }// want to post it here
+
     let theDataObject = {
       // labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"],
       labels: labelsArray,
@@ -447,17 +409,12 @@ export class Graphs extends React.Component {
     }
     return (
       <div>
-        {/* <form action="/action_page.php">
-          <input type="file" id="myFile" name="filename" />
-          <input type="submit" />
-        </form> */}
 
         Select a file: <input type="file" id="myFile" />
         <button type='button' onClick={this.processFile}>Process</button>
         <button type='button' onClick={this.reRenderComponent}>Re-Render</button>
         <table id="myTable"></table>
 
-        {console.log('within the react component, ', theDataObject)}
 
 
         <Line

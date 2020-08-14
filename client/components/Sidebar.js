@@ -12,8 +12,7 @@ class Sidebar extends Component {
 
   render() {
     const { isLoggedIn } = this.props
-    console.log("Am I logged in?", isLoggedIn)
-    console.log('the props on the Sidebar component are, ', this.props)
+
     return (
       <section className="sidebar">
         <div className="sidebar-header">
@@ -31,7 +30,6 @@ class Sidebar extends Component {
 }
 
 const mapState = state => {
-  console.log('the state on the Sidebar component is, ', state)
   return {
     isLoggedIn: !!state.user.id,
     userId: state.user.id,

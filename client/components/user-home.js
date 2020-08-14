@@ -19,7 +19,6 @@ export const UserHome = props => {
  * CONTAINER
  */
 const mapState = state => {
-  console.log('the current state from the redux store is ', state);
   return {
     email: state.user.email
   }
