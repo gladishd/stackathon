@@ -6,6 +6,8 @@ class NewMessageEntry extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
+    this.loadFile = this.loadFile.bind(this);
   }
   handleChange(event) {
 
@@ -24,9 +26,20 @@ class NewMessageEntry extends Component {
     // when the user logs in, their real name should be
     // displayed.
 
-
     this.props.post({ content, channelId, name });
   }
+
+  uploadImage(event) {
+    event.preventDefault();
+    var theFile = document.getElementById("imageUpload");
+    console.log(theFile)
+  }
+
+  loadFile(event) {
+    var image = document.getElementById('output');
+    image.src = URL.createObjectURL(event.target.files[0]);
+  }
+
   render() {
 
     console.log('the state in general, on the NewMessageEntry component, is ', this.props.reduxState)
@@ -42,6 +55,11 @@ class NewMessageEntry extends Component {
             onChange={this.handleChange}
             placeholder="Say something nice..."
           />
+
+          <input type="file" accept="image/*" name="image" id="file" onChange={this.loadFile} style={{ "display": "none" }} />
+          <p><label htmlFor="file" style={{ "cursor": "pointer" }}>Upload Image</label></p>
+          <img id="output" width="200" />
+
           <span className="input-group-btn">
             <button className="btn btn-default" type="submit">
               Chat!

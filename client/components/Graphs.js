@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {fetchData} from '../store'
+import { connect } from 'react-redux'
+import { fetchData } from '../store'
 import store from '../store'
 import {
   Line,
@@ -12,11 +12,31 @@ import {
   Bubble,
   Scatter
 } from 'react-chartjs-2'
+import { object } from 'prop-types'
 
 export class Graphs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      dummyVariable: false,
+      generatedGraph: {
+        labels: [],
+        datasets: [
+          {
+            label: 'units',
+            fill: false,
+            lineTension: 0.5,
+            backgroundColor: 'rgba(75,102,192,1)',
+            pointBackgroundColor: 'rgba(0, 205, 100, 0.6)',
+            hoverBorderColor: 'rgba(205, 255, 0, 1)',
+            pointRadius: 15,
+            borderColor: 'rgba(0,0,0,1)',
+            borderWidth: 2,
+            pointHoverBorderWidth: 15,
+            data: []
+          }
+        ]
+      },
       lineData: {
         labels: [],
         datasets: [
@@ -191,6 +211,8 @@ export class Graphs extends React.Component {
       }
     }
     this.handleClick = this.handleClick.bind(this)
+    this.processFile = this.processFile.bind(this)
+    this.reRenderComponent = this.reRenderComponent.bind(this)
   }
   componentDidMount() {
     this.props.fetchGraphs()
@@ -199,7 +221,136 @@ export class Graphs extends React.Component {
     e.preventDefault()
     this.props.history.push(`/graphs/${e.target.id}`)
   }
+
+  reRenderComponent(e) {
+    e.preventDefault()
+    console.log("rerendering!")
+    this.setState({ dummyVariable: !this.state.dummyVariable })
+  }
+
+  async processFile() { // need to use arrow function to access this.state
+    let labelsArray = [];
+    let dataArray = [];
+
+    var fileSize = 0;
+    //get file
+    var theFile = document.getElementById("myFile");
+
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+    //check if file is CSV
+    if (regex.test(theFile.value.toLowerCase())) {
+      //check if browser support FileReader
+      if (typeof (FileReader) != "undefined") {
+        //get table element
+        var table = document.getElementById("myTable");
+        var headerLine = "";
+        //create html5 file reader object
+        var myReader = new FileReader();
+        // call filereader. onload function
+        myReader.onload = async function (e) {
+          var content = await myReader.result;
+
+          // console.log(content)
+
+          //split csv file using "\n" for new line ( each row)
+          // var lines = content[0].split("\r");
+          var lines = content.split('\n')
+
+          // console.log(content, typeof content, )
+
+          // console.log(content.split('\n'))
+
+          let optionsArray = content.split('\n')[0].split(',');
+
+          for (let count = 1; count < 10; count++) {
+            let singleRowContent = content.split('\n')[count].split(',')
+            console.log(singleRowContent)
+            labelsArray.push(singleRowContent[optionsArray.indexOf('age')])
+            dataArray.push(Number(singleRowContent[optionsArray.indexOf('hui3_score')]))
+          }
+
+
+
+
+
+
+
+          //loop all rows
+          for (var count = 0; count < 10; count++) {
+            //create a tr element
+            var row = document.createElement("tr");
+            //split each row content
+            var rowContent = lines[count].split(",");
+            //loop throw all columns of a row
+            for (var i = 0; i < rowContent.length; i++) {
+              //create td element
+              var cellElement = document.createElement("td");
+              if (count == 0) {
+                cellElement = document.createElement("th");
+              } else {
+                cellElement = document.createElement("td");
+              }
+              //add a row element as a node for table
+              var cellContent = document.createTextNode(rowContent[i]);
+
+              cellElement.appendChild(cellContent);
+              //append row child
+              row.appendChild(cellElement);
+            }
+            //append table contents
+            myTable.appendChild(row);
+          }
+        }
+
+        //call file reader onload
+        await myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
+        this.setState({ dataArray: dataArray, labelsArray: labelsArray })
+        this.setState({
+          generatedGraph: {
+            labels: labelsArray,
+            datasets: [
+              {
+                label: dataArray[0],
+                fill: false,
+                lineTension: 0.5,
+                backgroundColor: 'rgba(75,102,192,1)',
+                pointBackgroundColor: 'rgba(0, 205, 100, 0.6)',
+                hoverBorderColor: 'rgba(205, 255, 0, 1)',
+                pointRadius: 15,
+                borderColor: 'rgba(0,0,0,1)',
+                borderWidth: 2,
+                pointHoverBorderWidth: 15,
+                data: dataArray
+              }
+            ]
+          }
+        });
+      }
+      else {
+        alert("This browser does not support HTML5.");
+      }
+
+    }
+    else {
+      alert("Please upload a valid CSV file.");
+    }
+
+    console.log(dataArray, labelsArray)
+
+    return false;
+  }
+
+
+
+
+  // eslint-disable-next-line max-statements
   render() {
+    console.log("did we re-render?")
+
+
+    console.log('the current value of this.state is, ', this.state)
+
+
     let valuesSource1 = []
     let valuesSource2 = []
 
@@ -264,8 +415,64 @@ export class Graphs extends React.Component {
       }
     }
     dataScatter.datasets[0].data = dataBubble.datasets[0].data = dataScatterBubble
+
+    console.log('this.state.dataArray is currently ', this.state.dataArray, 'and this.state.labelsArray is currently, ', this.state.labelsArray)
+    // const { labelsArray, dataArray } = this.state;
+    let labelsArray = [];
+    let dataArray = []
+    let theLabel = 'somethingsomething'
+    labelsArray = this.state.labelsArray
+    dataArray = this.state.dataArray
+    let theDataObject = {
+      // labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"],
+      labels: labelsArray,
+      datasets: [
+        {
+          label: 'units',
+          fill: false,
+          lineTension: 0.5,
+          backgroundColor: 'rgba(75,102,192,1)',
+          pointBackgroundColor: 'rgba(0, 205, 100, 0.6)',
+          hoverBorderColor: 'rgba(205, 255, 0, 1)',
+          pointRadius: 15,
+          borderColor: 'rgba(0,0,0,1)',
+          borderWidth: 2,
+          pointHoverBorderWidth: 15,
+          data: dataArray
+          // data: [0.88174, 0.78227, 0.50017, 0.7745099999999998, 0.62959, 0.8139299999999999, 0.79392, 0.63674, 0.5269400000000001]
+        }
+      ]
+    }
     return (
       <div>
+        {/* <form action="/action_page.php">
+          <input type="file" id="myFile" name="filename" />
+          <input type="submit" />
+        </form> */}
+
+        Select a file: <input type="file" id="myFile" />
+        <button type='button' onClick={this.processFile}>Process</button>
+        <button type='button' onClick={this.reRenderComponent}>Re-Render</button>
+        <table id="myTable"></table>
+
+        {console.log('within the react component, ', theDataObject)}
+
+
+        <Line
+          data={theDataObject}
+          options={{
+            title: {
+              display: true,
+              text: theLabel,
+              fontSize: 20
+            },
+            legend: {
+              display: true,
+              position: 'right'
+            }
+          }}
+        />
+
         <Line
           data={this.state.lineData}
           options={{
@@ -391,7 +598,7 @@ export class Graphs extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {graphs: state}
+  return { graphs: state }
 }
 
 const mapDispatchToProps = dispatch => {

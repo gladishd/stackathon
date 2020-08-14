@@ -11,12 +11,18 @@ const User = db.define('user', {
   displayImage: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      // isUrl: true // need to validate this
+    }
   },
   email: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isEmail: true // need to validate this
+    }
   },
   password: {
     type: Sequelize.STRING,

@@ -2,43 +2,67 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { auth } from '../store'
+import { render } from 'enzyme'
 
 /**
  * COMPONENT
  */
-const AuthForm = props => {
-  const { name, displayName, handleSubmit, error } = props
-  return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="displayImage">
-            <small>Display Image</small>
-          </label>
-          <input name="displayImage" type="text" />
-          <label htmlFor="displayName">
-            <small>Display Name</small>
-          </label>
-          <input name="displayName" type="text" />
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
-    </div>
-  )
+class AuthForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.alertIfEmpty = this.alertIfEmpty.bind(this)
+  }
+
+  alertIfEmpty(evt) {
+    const { email, password, displayName, displayImage } = evt.target;
+    if (!email.value || !password.value || !displayName.value || !displayImage.value) {
+      alert("All forms must be filled out!")
+      return false;
+    }
+    return true;
+  }
+
+
+  render() {
+    const { name, displayName, handleSubmit, error } = this.props
+    return (
+      < div >
+        <form onSubmit={
+          (e) => {
+            let submit = this.alertIfEmpty(e);
+            if (submit) { handleSubmit(e) }
+          }
+
+        } name={name}>
+          <div>
+            <label htmlFor="displayImage">
+              <small>Display Image</small>
+            </label>
+            <input name="displayImage" type="text" />
+            <label htmlFor="displayName">
+              <small>Display Name</small>
+            </label>
+            <input name="displayName" type="text" />
+            <label htmlFor="email">
+              <small>Email</small>
+            </label>
+            <input name="email" type="text" />
+          </div>
+          <div>
+            <label htmlFor="password">
+              <small>Password</small>
+            </label>
+            <input name="password" type="password" />
+          </div>
+          <div>
+            <button type="submit">{displayName}</button>
+          </div>
+          {error && error.response && <div> {error.response.data} </div>}
+        </form>
+        <a href="/auth/google">{displayName} with Google</a>
+      </div >
+    )
+  }
 }
 
 /**

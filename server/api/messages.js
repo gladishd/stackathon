@@ -28,10 +28,16 @@ router.post('/', async (req, res, next) => {
       }
     })
 
+    console.log('does the imageUrl exist? ', !imageUrl[0])
+
+    // if (!imageUrl[0]) {
+    //   imageUrl = 'https://images.macrumors.com/t/CynyMmV320sxD-tHY9kdnlFNnBc=/400x0/filters:quality(90)/article-new/2019/04/guest-user-250x250.jpg?lossy'
+    // }
+
     const [author] = await Author.findOrCreate({ // when we sign up, we want the author to already exist so that it doesn't create a new one with the default image.
       where: {
         name: req.body.name, // always req.body.name, not hardcoded here as was done before (name: req.body.name || 'Cody')
-        image: imageUrl[0].dataValues.displayImage
+        image: !imageUrl[0] ? 'https://images.macrumors.com/t/CynyMmV320sxD-tHY9kdnlFNnBc=/400x0/filters:quality(90)/article-new/2019/04/guest-user-250x250.jpg?lossy' : imageUrl[0].dataValues.displayImage
       }
     })
     const message = Message.build(req.body)
