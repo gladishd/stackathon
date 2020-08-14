@@ -13,31 +13,14 @@ import {
   Bubble,
   Scatter
 } from 'react-chartjs-2'
-import { object } from 'prop-types'
 
 export class Graphs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       dummyVariable: false,
-      generatedGraph: {
-        labels: [],
-        datasets: [
-          {
-            label: 'units',
-            fill: false,
-            lineTension: 0.5,
-            backgroundColor: 'rgba(75,102,192,1)',
-            pointBackgroundColor: 'rgba(0, 205, 100, 0.6)',
-            hoverBorderColor: 'rgba(205, 255, 0, 1)',
-            pointRadius: 15,
-            borderColor: 'rgba(0,0,0,1)',
-            borderWidth: 2,
-            pointHoverBorderWidth: 15,
-            data: []
-          }
-        ]
-      },
+      dataArrayForRender: [],
+      labelsArrayForRender: [],
       lineData: {
         labels: [],
         datasets: [
@@ -214,9 +197,20 @@ export class Graphs extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.processFile = this.processFile.bind(this)
     this.reRenderComponent = this.reRenderComponent.bind(this)
+    this.getAndConsoleLogGraphData = this.getAndConsoleLogGraphData.bind(this)
   }
   componentDidMount() {
     this.props.fetchGraphs();
+  }
+
+  getAndConsoleLogGraphData(e) {
+    e.preventDefault() // don't refresh the page
+    this.props.getNewGraph();
+    // console.log(this.props.graphs.addMessages.graphs)
+    this.setState({
+      dataArrayForRender: this.props.graphs.addMessages.graphs[3].data,
+      labelsArrayForRender: this.props.graphs.addMessages.graphs[3].labels
+    })
   }
   handleClick(e) {
     e.preventDefault()
@@ -226,7 +220,6 @@ export class Graphs extends React.Component {
   reRenderComponent(e) {
     e.preventDefault()
     this.setState({ dummyVariable: !this.state.dummyVariable })
-    this.props.getNewGraph();
   }
 
   async processFile() { // need to use arrow function to access this.state
@@ -387,9 +380,11 @@ export class Graphs extends React.Component {
       this.props.post(dataArray, labelsArray)
     }// want to post it here
 
+    console.log(this.state)
+
     let theDataObject = {
       // labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"],
-      labels: labelsArray,
+      labels: this.state.labelsArrayForRender,
       datasets: [
         {
           label: 'units',
@@ -402,17 +397,19 @@ export class Graphs extends React.Component {
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 2,
           pointHoverBorderWidth: 15,
-          data: dataArray
+          data: this.state.dataArrayForRender
           // data: [0.88174, 0.78227, 0.50017, 0.7745099999999998, 0.62959, 0.8139299999999999, 0.79392, 0.63674, 0.5269400000000001]
         }
       ]
     }
+
     return (
       <div>
 
         Select a file: <input type="file" id="myFile" />
         <button type='button' onClick={this.processFile}>Process</button>
         <button type='button' onClick={this.reRenderComponent}>Re-Render</button>
+        <button type='button' onClick={this.getAndConsoleLogGraphData}>Console log graph data</button>
         <table id="myTable"></table>
 
 

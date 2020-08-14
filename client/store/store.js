@@ -18,7 +18,7 @@ const initialState = {
   messages: [],
   newMessageEntry: '',
   newGraphData: {},
-  currentGraphDataRetrieved: {}
+  graphs: {}
 };
 
 // ACTION CREATORS
@@ -83,8 +83,8 @@ export const postNewGraphData = (data, labels) => {
 export const fetchNewGraphData = () => {
   return async (dispatch) => {
     const response = await axios.get('/api/graphs');
-    const graphs = response.data;
-    const action = gotGraphsFromServer(graphs);
+    const dataArray = response.data;
+    const action = gotGraphsFromServer(dataArray);
     dispatch(action);
   };
 };
@@ -108,7 +108,7 @@ export default function (state = initialState, action) {
       };
     case GOT_GRAPHS_FROM_SERVER:
       return {
-        ...state, currentGraphDataRetrieved: action.data
+        ...state, graphs: action.graphs
       }
     default:
       return state;
