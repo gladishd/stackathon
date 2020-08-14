@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchData } from '../store'
-import { postNewGraphData } from '../store/store.js'
+import { postNewGraphData, fetchNewGraphData } from '../store/store.js'
 import store from '../store'
 import {
   Line,
@@ -217,10 +217,6 @@ export class Graphs extends React.Component {
   }
   componentDidMount() {
     this.props.fetchGraphs();
-    this.props.post([1, 4, 1, 4], ["55", "59", "70", "55"])
-
-
-
   }
   handleClick(e) {
     e.preventDefault()
@@ -231,24 +227,25 @@ export class Graphs extends React.Component {
     e.preventDefault()
     console.log("rerendering!")
     this.setState({ dummyVariable: !this.state.dummyVariable })
+    // this.setState({
+    //   labelsArray: [],
+    //   dataArray: [],
+    // })
+    this.props.getNewGraph();
+    console.log('within the reRenderComponent, the value of the redux state, located on graphs, is ', this.props.graphs)
   }
 
   async processFile() { // need to use arrow function to access this.state
     let labelsArray = [];
     let dataArray = [];
 
-    var fileSize = 0;
-    //get file
     var theFile = document.getElementById("myFile");
 
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
-    //check if file is CSV
-    if (regex.test(theFile.value.toLowerCase())) {
-      //check if browser support FileReader
-      if (typeof (FileReader) != "undefined") {
-        //get table element
-        var table = document.getElementById("myTable");
-        var headerLine = "";
+    if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
+      if (typeof (FileReader) != "undefined") { // if the browser supports FileReader
+        // var table = document.getElementById("myTable");
+        // var headerLine = "";
         //create html5 file reader object
         var myReader = new FileReader();
         // call filereader. onload function
@@ -341,6 +338,7 @@ export class Graphs extends React.Component {
     }
 
     console.log(dataArray, labelsArray)
+    this.props.post(dataArray, labelsArray)
 
     return false;
   }
@@ -352,9 +350,7 @@ export class Graphs extends React.Component {
   render() {
     console.log("did we re-render?")
 
-
     console.log('the current value of this.state is, ', this.state)
-
 
     let valuesSource1 = []
     let valuesSource2 = []
@@ -428,6 +424,7 @@ export class Graphs extends React.Component {
     let theLabel = 'somethingsomething'
     labelsArray = this.state.labelsArray
     dataArray = this.state.dataArray
+    this.props.post(dataArray, labelsArray)
     let theDataObject = {
       // labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"],
       labels: labelsArray,
@@ -613,7 +610,10 @@ const mapDispatchToProps = dispatch => {
     },
     post: (data, labels) => {
       dispatch(postNewGraphData(data, labels))
-    }
+    },
+    getNewGraph: () => {
+      dispatch(fetchNewGraphData())
+    },
   }
 }
 

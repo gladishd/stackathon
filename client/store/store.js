@@ -11,12 +11,14 @@ const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_SERVER';
 const WRITE_MESSAGE = 'WRITE_MESSAGE';
 const GOT_NEW_MESSAGE_FROM_SERVER = 'GOT_NEW_MESSAGE_FROM_SERVER';
 const POSTED_NEW_GRAPH_DATA = 'POSTED_NEW_GRAPH_DATA';
+const GOT_GRAPHS_FROM_SERVER = 'GOT_GRAPHS_FROM_SERVER';
 
 // INITIAL STATE
 const initialState = {
   messages: [],
   newMessageEntry: '',
-  newGraphData: {}
+  newGraphData: {},
+  currentGraphDataRetrieved: {}
 };
 
 // ACTION CREATORS
@@ -38,6 +40,11 @@ export const gotNewMessageFromServer = (newMessage) => ({
 export const postedNewGraphData = (data) => ({
   type: POSTED_NEW_GRAPH_DATA,
   data,
+})
+
+export const gotGraphsFromServer = (graphs) => ({
+  type: GOT_GRAPHS_FROM_SERVER,
+  graphs,
 })
 
 // thunk-creator is an action creator; our 'thunk creator'
@@ -74,6 +81,15 @@ export const postNewGraphData = (data, labels) => {
   }
 }
 
+export const fetchNewGraphData = () => {
+  return async (dispatch) => {
+    const response = await axios.get('/api/graphs');
+    const graphs = response.data;
+    const action = gotGraphsFromServer(graphs);
+    dispatch(action);
+  };
+};
+
 
 // REDUCER
 export default function (state = initialState, action) {
@@ -91,6 +107,10 @@ export default function (state = initialState, action) {
       return {
         ...state, newGraphData: action.data
       };
+    case GOT_GRAPHS_FROM_SERVER:
+      return {
+        ...state, currentGraphDataRetrieved: action.data
+      }
     default:
       return state;
   }
