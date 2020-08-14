@@ -196,7 +196,6 @@ export class Graphs extends React.Component {
     }
     this.handleClick = this.handleClick.bind(this)
     this.processFile = this.processFile.bind(this)
-    this.reRenderComponent = this.reRenderComponent.bind(this)
     this.getAndConsoleLogGraphData = this.getAndConsoleLogGraphData.bind(this)
   }
   componentDidMount() {
@@ -215,11 +214,6 @@ export class Graphs extends React.Component {
   handleClick(e) {
     e.preventDefault()
     this.props.history.push(`/graphs/${e.target.id}`)
-  }
-
-  reRenderComponent(e) {
-    e.preventDefault()
-    this.setState({ dummyVariable: !this.state.dummyVariable })
   }
 
   async processFile() { // need to use arrow function to access this.state
@@ -380,8 +374,6 @@ export class Graphs extends React.Component {
       this.props.post(dataArray, labelsArray)
     }// want to post it here
 
-    console.log(this.state)
-
     let theDataObject = {
       // labels: ["55", "59", "70", "55", "51", "55", "52", "69", "72"],
       labels: this.state.labelsArrayForRender,
@@ -407,9 +399,8 @@ export class Graphs extends React.Component {
       <div>
 
         Select a file: <input type="file" id="myFile" />
-        <button type='button' onClick={this.processFile}>Process</button>
-        <button type='button' onClick={this.reRenderComponent}>Re-Render</button>
-        <button type='button' onClick={this.getAndConsoleLogGraphData}>Console log graph data</button>
+        <button type='button' onClick={this.processFile}>Read File</button>
+        <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
         <table id="myTable"></table>
 
 
