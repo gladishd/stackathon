@@ -37,6 +37,7 @@ class NewMessageEntry extends Component {
 
   loadFile(event) {
     var image = document.getElementById('output');
+    console.log(URL.createObjectURL(event.target.files[0]))
     image.src = URL.createObjectURL(event.target.files[0]);
   }
 
@@ -53,7 +54,7 @@ class NewMessageEntry extends Component {
             name="content"
             value={this.props.newMessageEntry}
             onChange={this.handleChange}
-            placeholder="Say something nice..."
+            placeholder=""
           />
 
           <input type="file" accept="image/*" name="image" id="file" onChange={this.loadFile} style={{ "display": "none" }} />
