@@ -12,6 +12,7 @@ const WRITE_MESSAGE = 'WRITE_MESSAGE';
 const GOT_NEW_MESSAGE_FROM_SERVER = 'GOT_NEW_MESSAGE_FROM_SERVER';
 const POSTED_NEW_GRAPH_DATA = 'POSTED_NEW_GRAPH_DATA';
 const GOT_GRAPHS_FROM_SERVER = 'GOT_GRAPHS_FROM_SERVER';
+const RESET_GRAPHS = 'RESET_GRAPHS';
 
 // INITIAL STATE
 const initialState = {
@@ -47,6 +48,11 @@ export const gotGraphsFromServer = (graphs) => ({
   graphs,
 })
 
+export const resetDatabaseActionCreator = (graphs) => ({
+  type: RESET_GRAPHS,
+  graphs,
+})
+
 // thunk-creator is an action creator; our 'thunk creator'
 export const fetchMessages = () => {
   // the inner function is our 'thunk'
@@ -72,9 +78,9 @@ export const postNewMessageEntry = (messagePost) => {
 };
 
 export const postNewGraphData = (data, labels) => {
-
   return async (dispatch) => {
     const response = await axios.post('/api/graphs', { data, labels })
+    throw new Error('this message is just to prevent an infinite loop')
     const action = postedNewGraphData(response.data);
     dispatch(action);
   }
@@ -88,6 +94,17 @@ export const fetchNewGraphData = () => {
     dispatch(action);
   };
 };
+
+export const resetGraphDataThunk = () => {
+  return async (dispatch) => {
+    console.log('did we reach the reset graph data thunk?')
+    const response = await axios.delete('/api/graphs');
+    const data = response.data;
+    const action = resetDatabaseActionCreator(data);
+    dispatch(action)
+
+  }
+}
 
 
 // REDUCER
@@ -107,6 +124,10 @@ export default function (state = initialState, action) {
         ...state, newGraphData: action.data
       };
     case GOT_GRAPHS_FROM_SERVER:
+      return {
+        ...state, graphs: action.graphs
+      }
+    case RESET_GRAPHS:
       return {
         ...state, graphs: action.graphs
       }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { writeMessage, postNewMessageEntry } from '../store/store.js';
+import { Howl } from 'howler'
 class NewMessageEntry extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,7 @@ class NewMessageEntry extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.loadFile = this.loadFile.bind(this);
+    this.sound5 = this.sound5.bind(this);
   }
   handleChange(event) {
     this.props.write(event.target.value);
@@ -46,6 +48,11 @@ class NewMessageEntry extends Component {
     image.src = URL.createObjectURL(event.target.files[0]);
   }
 
+  sound5() {
+    const Sounds = new Howl({ src: ['/5.wav'] })
+    Sounds.play()
+  }
+
   render() {
 
 
@@ -71,6 +78,9 @@ class NewMessageEntry extends Component {
             <button className="btn btn-default" type="submit">
               Chat!
             </button>
+            <button type="button" onClick={this.sound5}>
+              Sound
+        </button>
           </span>
         </div>
       </form>

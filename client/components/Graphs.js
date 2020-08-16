@@ -2,7 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchData } from '../store'
-import { postNewGraphData, fetchNewGraphData } from '../store/store.js'
+import { postNewGraphData, fetchNewGraphData, resetGraphDataThunk } from '../store/store.js'
 import store from '../store'
 import MessagesList from './MessagesList'
 import {
@@ -20,6 +20,7 @@ export class Graphs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      count: 0, //to prevent an infinite loop of
       selectedOption: '',
       dataArrayForRender: [],
       labelsArrayForRender: [],
@@ -200,10 +201,13 @@ export class Graphs extends React.Component {
     this.processFile = this.processFile.bind(this)
     this.getAndConsoleLogGraphData = this.getAndConsoleLogGraphData.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.resetGraph = this.resetGraph.bind(this)
   }
   componentDidMount() {
     this.props.fetchGraphs();
   }
+
+
 
   handleChange(e) {
     let selectedOption = e.target.value
@@ -212,29 +216,37 @@ export class Graphs extends React.Component {
     })
   }
 
+  resetGraph(e) {
+    e.preventDefault();
+    this.props.reset();
+  }
 
-  getAndConsoleLogGraphData(e) {
+
+  getAndConsoleLogGraphData(e, count = 0) {
     e.preventDefault() // don't refresh the page
     this.props.getNewGraph();
-    setTimeout(
+    this.props.getNewGraph();
+
+    if (this.props.graphs.addMessages.graphs[1]) {
       this.setState({
-        dataArrayForRender: this.props.graphs.addMessages.graphs[3].data,
-        labelsArrayForRender: this.props.graphs.addMessages.graphs[3].labels
-      }), 30000
-    )
+        dataArrayForRender: this.props.graphs.addMessages.graphs[1].data,
+        labelsArrayForRender: this.props.graphs.addMessages.graphs[1].labels
+      })
+    }
+    if (count < 10) {
+      this.getAndConsoleLogGraphData(e, count + 1)
+    }
   }
+
   handleClick(e) {
     e.preventDefault()
     this.props.history.push(`/graphs/${e.target.id}`)
   }
 
-  async processFile() { // need to use arrow function to access this.state
-
+  processFile() { // need to use arrow function to access this.state
     let labelsArray = [];
     let dataArray = [];
-
     var theFile = document.getElementById("myFile");
-
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
       if (typeof (FileReader) != "undefined") { // if the browser supports FileReader
@@ -257,13 +269,6 @@ export class Graphs extends React.Component {
             labelsArray.push(singleRowContent[optionsArray.indexOf('age')])
             dataArray.push(Number(singleRowContent[optionsArray.indexOf('hui3_score')]))
           }
-
-
-
-
-
-
-
           //loop all rows
           for (var count = 0; count < 10; count++) {
             //create a tr element
@@ -292,7 +297,7 @@ export class Graphs extends React.Component {
         }
 
         //call file reader onload
-        await myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
+        myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
         this.setState({ dataArray: dataArray, labelsArray: labelsArray })
       }
       else {
@@ -386,7 +391,7 @@ export class Graphs extends React.Component {
     let theLabel = 'some title'
     labelsArray = this.state.labelsArray
     dataArray = this.state.dataArray
-    if (dataArray && labelsArray) {
+    if (dataArray && labelsArray && this.state.count < 10) {
       this.props.post(dataArray, labelsArray)
     }// want to post it here
 
@@ -597,9 +602,10 @@ export class Graphs extends React.Component {
         Select a file: <input type="file" id="myFile" />
         <button type='button' onClick={this.processFile}>Read File</button>
         <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
+        <button type='button' onClick={this.resetGraph}>Reset</button>
         <table id="myTable"></table>
         <select name="cars" className="chartType" onChange={this.handleChange}>
-          <option value="" selected>
+          <option value="" defaultValue>
             Select a chart type
           </option>
           <option value="line">Line</option>
@@ -611,6 +617,8 @@ export class Graphs extends React.Component {
           <option value="bubble">Bubble</option>
           <option value="scatter">Scatter</option>
         </select>
+
+
 
         <div className='graphAndChat'>
           <div>
@@ -764,6 +772,9 @@ const mapDispatchToProps = dispatch => {
     },
     getNewGraph: () => {
       dispatch(fetchNewGraphData())
+    },
+    reset: () => {
+      dispatch(resetGraphDataThunk())
     },
   }
 }
