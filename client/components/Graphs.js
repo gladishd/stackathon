@@ -224,7 +224,7 @@ export class Graphs extends React.Component {
     this.setState({
       selectedColumnData: e.target.value
     })
-    console.log(this.state.selectedColumnData)
+
   }
 
   selectColumnLabels(e) {
@@ -232,7 +232,6 @@ export class Graphs extends React.Component {
     this.setState({
       selectedColumnLabels: e.target.value
     })
-    this.processFile()
   }
 
   resetGraph(e) {
@@ -245,6 +244,7 @@ export class Graphs extends React.Component {
     e.preventDefault() // don't refresh the page
     this.props.getNewGraph();
     this.props.getNewGraph();
+    console.log(this.props.graphs.addMessages.graphs)
 
     if (this.props.graphs.addMessages.graphs[1]) {
 
@@ -307,11 +307,11 @@ export class Graphs extends React.Component {
         this.setState({ columnsArray: columns }) // this just re-renders things
       }
       else {
-        alert("This browser does not support HTML5.");
+        alert("This browser doesn't support HTML5.  Use Chrome instead.  ");
       }
     }
     else {
-      alert("Please upload a valid CSV file.");
+      alert("Need to upload a valid .csv file!");
     }
     return false;
   }
@@ -378,11 +378,11 @@ export class Graphs extends React.Component {
         this.setState({ dataArray: dataArray, labelsArray: labelsArray }) // this just re-renders things
       }
       else {
-        alert("This browser does not support HTML5.");
+        alert("This browser doesn't support HTML5.  Use Chrome instead.  ");
       }
     }
     else {
-      alert("Please upload a valid CSV file.");
+      alert("Need to upload a valid .csv file!");
     }
     return false;
   }
@@ -698,7 +698,7 @@ export class Graphs extends React.Component {
           </option>
           {optionColumns}
         </select>
-        {/* <button type='button' onClick={this.processFile}>Read File</button> */}
+        <button type='button' onClick={this.processFile}>Read File</button>
         <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
 
         <button type='button' onClick={this.resetGraph}>Reset</button>

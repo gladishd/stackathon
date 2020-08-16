@@ -6,7 +6,7 @@ const Graphs = db.define('graphs', {
     type: Sequelize.ARRAY(Sequelize.FLOAT)
   },
   labels: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+    type: Sequelize.ARRAY(Sequelize.FLOAT)
   }
 })
 
