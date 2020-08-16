@@ -4,29 +4,34 @@ import { writeMessage, postNewMessageEntry } from '../store/store.js';
 class NewMessageEntry extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      newMessageEntry: '',
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.loadFile = this.loadFile.bind(this);
   }
   handleChange(event) {
-
     this.props.write(event.target.value);
+    this.setState({ newMessageEntry: event.target.value })
   }
   handleSubmit(evt) {
     evt.preventDefault(); // don't forget to preventDefault!
     // our message content is on our state, which we're getting from our Redux store
 
     const content = this.props.newMessageEntry;
-
-    // our channelId is available from the props sent by MessagesList, which it receives as props from the Route!
-    const channelId = this.props.channelId;
+    const channelId = 1;
 
     const name = this.props.reduxState.user.displayName || 'Guest'; // this should be by default.
     // when the user logs in, their real name should be
     // displayed.
 
     this.props.post({ content, channelId, name });
+
+    this.setState({
+      newMessageEntry: ''
+    })
   }
 
   uploadImage(event) {
@@ -50,9 +55,10 @@ class NewMessageEntry extends Component {
         <div className="input-group input-group-lg">
           <input
             className="form-control"
+            id='form'
             type="text"
             name="content"
-            value={this.props.newMessageEntry}
+            value={this.state.newMessageEntry}
             onChange={this.handleChange}
             placeholder=""
           />

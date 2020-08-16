@@ -34,3 +34,23 @@ form div {
   flex-direction: row;
   width: 100%;
 }
+
+.singleMessage {
+  display: flex;
+}
+
+.singleMessage .messageAuthor {
+  bottom: 0;
+  width: 1em;
+  font-size: 0.5em;
+  margin-right: 5em;
+}
+
+.singleMessage .messageContent {
+
+}
+
+.singleMessage .messageImage {
+  width: 15px;
+  height: 15px;
+}

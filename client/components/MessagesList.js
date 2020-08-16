@@ -27,6 +27,7 @@ class MessagesList extends Component {
     const channelId = 1;
     const messages = this.props.messages; // everything is on props
     // When it renders, it filters out messages for the appropriate channel based on :channelId
+    messages.sort((a, b) => (a.id > b.id) ? 1 : -1)
     const filteredMessages = messages.filter(
       (message) => message.channelId === channelId
     );

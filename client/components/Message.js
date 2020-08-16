@@ -4,20 +4,19 @@ export default function Message(props) {
   const message = props.message
 
   return (
-    <li className="media">
-      <div className="media-left">
-        <a href="#">
-          <img style={{ 'width': '10%' }}
-            className="media-object"
-            src={message.author.image}
-            alt="image"
-          />
-        </a>
+    <div className='singleMessage'>
+      <div className='messageImage'>
+        <img className='messageImage'
+          src={message.author.image}
+          alt="image"
+        />
       </div>
-      <div className="media-body">
-        <h4 className="media-heading">{message.author.name}</h4>
+      <div className='messageAuthor'>
+        <h4>{message.author.name}</h4>
+      </div>
+      <div className='messageContent'>
         {message.content}
       </div>
-    </li>
+    </div>
   )
 }
