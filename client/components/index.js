@@ -14,4 +14,4 @@ export { default as HowlComp } from './HowlComp'
 // import { Main } from './components';
 // instead of
 // import { Main } from './components/Main;
-export { default as Chat } from './Chat'
+

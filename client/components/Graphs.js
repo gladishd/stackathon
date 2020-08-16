@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchData } from '../store'
 import { postNewGraphData, fetchNewGraphData } from '../store/store.js'
 import store from '../store'
+import MessagesList from './MessagesList'
 import {
   Line,
   Pie,
@@ -215,11 +216,12 @@ export class Graphs extends React.Component {
   getAndConsoleLogGraphData(e) {
     e.preventDefault() // don't refresh the page
     this.props.getNewGraph();
-    // console.log(this.props.graphs.addMessages.graphs)
-    this.setState({
-      dataArrayForRender: this.props.graphs.addMessages.graphs[3].data,
-      labelsArrayForRender: this.props.graphs.addMessages.graphs[3].labels
-    })
+    setTimeout(
+      this.setState({
+        dataArrayForRender: this.props.graphs.addMessages.graphs[3].data,
+        labelsArrayForRender: this.props.graphs.addMessages.graphs[3].labels
+      }), 30000
+    )
   }
   handleClick(e) {
     e.preventDefault()
@@ -227,6 +229,7 @@ export class Graphs extends React.Component {
   }
 
   async processFile() { // need to use arrow function to access this.state
+
     let labelsArray = [];
     let dataArray = [];
 
@@ -300,6 +303,7 @@ export class Graphs extends React.Component {
     else {
       alert("Please upload a valid CSV file.");
     }
+
     return false;
   }
 
@@ -607,133 +611,139 @@ export class Graphs extends React.Component {
           <option value="bubble">Bubble</option>
           <option value="scatter">Scatter</option>
         </select>
-        <div>
-          {(() => {
-            switch (this.state.selectedOption) {
-              case 'line':
-                return <Line
-                  data={lineDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'pie':
-                return <Pie
-                  data={pieDoughnutDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'doughnut':
-                return <Doughnut
-                  data={pieDoughnutDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'bar':
-                return <Bar
-                  data={barDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'radar':
-                return <Radar
-                  data={radarDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'polar':
-                return <Polar
-                  data={polarDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'bubble':
-                return <Bubble
-                  data={bubbleDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              case 'scatter':
-                return <Scatter
-                  data={scatterDataObject}
-                  options={{
-                    title: {
-                      display: true,
-                      text: theLabel,
-                      fontSize: 20
-                    },
-                    legend: {
-                      display: true,
-                      position: 'right'
-                    }
-                  }}
-                />
-              default:
-                return <div>none</div>
-            }
-          })()}
+
+        <div className='graphAndChat'>
+          <div>
+            {(() => {
+              switch (this.state.selectedOption) {
+                case 'line':
+                  return <Line
+                    data={lineDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'pie':
+                  return <Pie
+                    data={pieDoughnutDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'doughnut':
+                  return <Doughnut
+                    data={pieDoughnutDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'bar':
+                  return <Bar
+                    data={barDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'radar':
+                  return <Radar
+                    data={radarDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'polar':
+                  return <Polar
+                    data={polarDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'bubble':
+                  return <Bubble
+                    data={bubbleDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                case 'scatter':
+                  return <Scatter
+                    data={scatterDataObject}
+                    options={{
+                      title: {
+                        display: true,
+                        text: theLabel,
+                        fontSize: 20
+                      },
+                      legend: {
+                        display: true,
+                        position: 'right'
+                      }
+                    }}
+                  />
+                default:
+                  return <div>none</div>
+              }
+            })()}
+          </div>
+          <div>
+            <MessagesList />
+          </div>
         </div>
       </div>
     )

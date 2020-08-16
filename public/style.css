@@ -22,3 +22,15 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.graphAndChat {
+  display: flex;
+  width: 100%;
+}
+
+.graphAndChat > div {
+  flex-wrap: wrap;
+  flex-grow: 1;
+  flex-direction: row;
+  width: 100%;
+}
