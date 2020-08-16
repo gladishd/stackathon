@@ -4,7 +4,7 @@ const Rainfall = require('./rainfall')
 const Message = require('./message')
 const Channel = require('./channel')
 const Author = require('./author')
-const Graphs = require('./Graphs')
+const Graphs = require('./graphs')
 
 Channel.hasMany(Message, {
   onDelete: 'cascade',
