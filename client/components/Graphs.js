@@ -21,7 +21,9 @@ export class Graphs extends React.Component {
     super(props)
     this.state = {
       count: 0, //to prevent an infinite loop of
+      columnsArray: [],
       selectedOption: '',
+
       dataArrayForRender: [],
       labelsArrayForRender: [],
       lineData: {
@@ -202,18 +204,35 @@ export class Graphs extends React.Component {
     this.getAndConsoleLogGraphData = this.getAndConsoleLogGraphData.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.resetGraph = this.resetGraph.bind(this)
+    this.getColumnNames = this.getColumnNames.bind(this)
+    this.selectColumnData = this.selectColumnData.bind(this)
+    this.selectColumnLabels = this.selectColumnLabels.bind(this)
   }
   componentDidMount() {
     this.props.fetchGraphs();
   }
-
-
 
   handleChange(e) {
     let selectedOption = e.target.value
     this.setState({
       selectedOption: selectedOption
     })
+  }
+
+  selectColumnData(e) {
+    e.preventDefault();
+    this.setState({
+      selectedColumnData: e.target.value
+    })
+    console.log(this.state.selectedColumnData)
+  }
+
+  selectColumnLabels(e) {
+    e.preventDefault();
+    this.setState({
+      selectedColumnLabels: e.target.value
+    })
+    this.processFile()
   }
 
   resetGraph(e) {
@@ -228,14 +247,17 @@ export class Graphs extends React.Component {
     this.props.getNewGraph();
 
     if (this.props.graphs.addMessages.graphs[1]) {
+
       this.setState({
         dataArrayForRender: this.props.graphs.addMessages.graphs[1].data,
         labelsArrayForRender: this.props.graphs.addMessages.graphs[1].labels
       })
+
     }
     if (count < 10) {
       this.getAndConsoleLogGraphData(e, count + 1)
     }
+    this.getColumnNames()
   }
 
   handleClick(e) {
@@ -243,9 +265,10 @@ export class Graphs extends React.Component {
     this.props.history.push(`/graphs/${e.target.id}`)
   }
 
-  processFile() { // need to use arrow function to access this.state
+  getColumnNames() {
     let labelsArray = [];
     let dataArray = [];
+    let columns = [];
     var theFile = document.getElementById("myFile");
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
@@ -266,8 +289,62 @@ export class Graphs extends React.Component {
 
           for (let count = 1; count < 10; count++) {
             let singleRowContent = content.split('\n')[count].split(',')
-            labelsArray.push(singleRowContent[optionsArray.indexOf('age')])
+            // if (this.state.selectedColumnData && this.state.selectedColumnLabels) {
+            // labelsArray.push(singleRowContent[optionsArray.indexOf(this.state.selectedColumnLabels)]) // using indexOf so that we can select two columns
+            // dataArray.push(Number(singleRowContent[optionsArray.indexOf(this.state.selectedColumnData)]))
+            // columns.push(optionsArray[count])
+            // } else {
+            labelsArray.push(singleRowContent[optionsArray.indexOf('age')]) // using indexOf so that we can select two columns
             dataArray.push(Number(singleRowContent[optionsArray.indexOf('hui3_score')]))
+            columns.push(optionsArray[count])
+            // }
+          }
+
+        }
+
+        //call file reader onload
+        myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
+        this.setState({ columnsArray: columns }) // this just re-renders things
+      }
+      else {
+        alert("This browser does not support HTML5.");
+      }
+    }
+    else {
+      alert("Please upload a valid CSV file.");
+    }
+    return false;
+  }
+
+  processFile() { // need to use arrow function to access this.state
+    let labelsArray = [];
+    let dataArray = [];
+    let columns = [];
+    let selectedColumnLabels = this.state.selectedColumnLabels;
+    let selectedColumnData = this.state.selectedColumnData;
+    var theFile = document.getElementById("myFile");
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+    if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
+      if (typeof (FileReader) != "undefined") { // if the browser supports FileReader
+        // var table = document.getElementById("myTable");
+        // var headerLine = "";
+        //create html5 file reader object
+        var myReader = new FileReader();
+        // call filereader. onload function
+        myReader.onload = async function (e) {
+          var content = await myReader.result;
+
+          //split csv file using "\n" for new line ( each row)
+          // var lines = content[0].split("\r");
+          var lines = content.split('\n')
+
+          let optionsArray = content.split('\n')[0].split(',');
+
+          for (let count = 1; count < 10; count++) {
+            let singleRowContent = content.split('\n')[count].split(',')
+            labelsArray.push(singleRowContent[optionsArray.indexOf(selectedColumnLabels)]) // using indexOf so that we can select two columns
+            dataArray.push(Number(singleRowContent[optionsArray.indexOf(selectedColumnData)]))
+            columns.push(optionsArray[count])
           }
           //loop all rows
           for (var count = 0; count < 10; count++) {
@@ -298,17 +375,15 @@ export class Graphs extends React.Component {
 
         //call file reader onload
         myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
-        this.setState({ dataArray: dataArray, labelsArray: labelsArray })
+        this.setState({ dataArray: dataArray, labelsArray: labelsArray }) // this just re-renders things
       }
       else {
         alert("This browser does not support HTML5.");
       }
-
     }
     else {
       alert("Please upload a valid CSV file.");
     }
-
     return false;
   }
 
@@ -317,6 +392,7 @@ export class Graphs extends React.Component {
   // eslint-disable-next-line max-statements
   render() {
 
+    console.log("the state on render is, ", this.state)
 
     let valuesSource1 = []
     let valuesSource2 = []
@@ -597,14 +673,37 @@ export class Graphs extends React.Component {
       ]
     }
 
+
+    let optionColumns = this.state.columnsArray
+      .filter((element) => {
+        return element !== undefined
+      }) // at first, the column names come back as the same length as the number of rows rendered
+      .map((element) =>
+        <option key={element} value={element}>{element}</option>
+      );
+
     return (
       <div>
-        Select a file: <input type="file" id="myFile" />
-        <button type='button' onClick={this.processFile}>Read File</button>
+        Select a file: <input type="file" id="myFile" onChange={this.getAndConsoleLogGraphData} />
+        {/* <button type='button' onClick={this.getAndConsoleLogGraphData}>Show data/labels options</button> */}
+        <select name="columnSelect" onChange={this.selectColumnData}>
+          <option value="" defaultValue>
+            Data
+          </option>
+          {optionColumns}
+        </select>
+        <select name="columnSelect" onChange={this.selectColumnLabels}>
+          <option value="" defaultValue>
+            Labels
+          </option>
+          {optionColumns}
+        </select>
+        {/* <button type='button' onClick={this.processFile}>Read File</button> */}
         <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
+
         <button type='button' onClick={this.resetGraph}>Reset</button>
         <table id="myTable"></table>
-        <select name="cars" className="chartType" onChange={this.handleChange}>
+        <select name="selectName" className="chartType" onChange={this.handleChange}>
           <option value="" defaultValue>
             Select a chart type
           </option>
@@ -617,6 +716,7 @@ export class Graphs extends React.Component {
           <option value="bubble">Bubble</option>
           <option value="scatter">Scatter</option>
         </select>
+
 
 
 
