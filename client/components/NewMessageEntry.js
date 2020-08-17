@@ -12,7 +12,7 @@ class NewMessageEntry extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.loadFile = this.loadFile.bind(this);
-    this.sound5 = this.sound5.bind(this);
+    this.sound1 = this.sound1.bind(this);
   }
   handleChange(event) {
     this.props.write(event.target.value);
@@ -44,11 +44,10 @@ class NewMessageEntry extends Component {
 
   loadFile(event) {
     var image = document.getElementById('output');
-    console.log(URL.createObjectURL(event.target.files[0]))
     image.src = URL.createObjectURL(event.target.files[0]);
   }
 
-  sound5() {
+  sound1() {
     const Sounds = new Howl({ src: ['/5.wav'] })
     Sounds.play()
   }
@@ -78,9 +77,9 @@ class NewMessageEntry extends Component {
             <button className="btn btn-default" type="submit">
               Chat!
             </button>
-            <button type="button" onClick={this.sound5}>
-              Sound
-        </button>
+            <button type="button" onClick={this.sound1}>
+              ‎‎
+            </button>
           </span>
         </div>
       </form>

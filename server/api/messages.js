@@ -6,7 +6,6 @@ module.exports = router
 // GET /api/messages
 router.get('/', async (req, res, next) => {
   try {
-    console.log('did we reach the get api route')
     const messages = await Message.findAll()
     res.json(messages)
   } catch (err) {
@@ -20,16 +19,12 @@ router.post('/', async (req, res, next) => {
   // We don't have proper users yet (we'll get there soon, though!).
   // Instead, we'll findOrCreate an author by name, for simplicity.
   // Of course, you wouldn't want to do this in a real chat app!
-  console.log('do we reach the post route')
   try {
-    console.log('the req.body object is ', req.body)
     const imageUrl = await User.findAll({
       where: {
         displayName: req.body.name
       }
     })
-
-    console.log('does the imageUrl exist? ', !imageUrl[0])
 
     // if (!imageUrl[0]) {
     //   imageUrl = 'https://images.macrumors.com/t/CynyMmV320sxD-tHY9kdnlFNnBc=/400x0/filters:quality(90)/article-new/2019/04/guest-user-250x250.jpg?lossy'

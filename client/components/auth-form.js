@@ -36,7 +36,7 @@ class AuthForm extends React.Component {
         } name={name}>
           <div>
             <label htmlFor="displayImage">
-              <small>Display Image</small>
+              <small>Display Image URL</small>
             </label>
             <input name="displayImage" type="text" />
             <label htmlFor="displayName">

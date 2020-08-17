@@ -23,14 +23,13 @@ export class Graphs extends React.Component {
       count: 0, //to prevent an infinite loop of
       columnsArray: [],
       selectedOption: '',
-
       dataArrayForRender: [],
       labelsArrayForRender: [],
       lineData: {
         labels: [],
         datasets: [
           {
-            label: 'millimeters',
+            label: '',
             fill: false,
             lineTension: 0.5,
             backgroundColor: 'rgba(75,192,192,1)',
@@ -48,7 +47,7 @@ export class Graphs extends React.Component {
         labels: [],
         datasets: [
           {
-            label: 'millimeters',
+            label: '',
             backgroundColor: [
               '#B21F00',
               '#C9DE00',
@@ -78,7 +77,7 @@ export class Graphs extends React.Component {
         datasets: [
           {
             data: [],
-            label: 'millimeters',
+            label: '',
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -142,7 +141,7 @@ export class Graphs extends React.Component {
       dataPolar: {
         datasets: [
           {
-            label: 'millimeters',
+            label: '',
             data: [],
             backgroundColor: [
               'rgb(200, 200, 200)',
@@ -174,7 +173,7 @@ export class Graphs extends React.Component {
             hoverBorderWidth: 3,
             hoverRadius: 3,
             hitRadius: 5,
-            label: 'millimeters',
+            label: '',
             pointStyle: 'star',
             rotation: 0,
             radius: 3
@@ -184,7 +183,7 @@ export class Graphs extends React.Component {
       dataScatter: {
         datasets: [
           {
-            label: 'millimeters',
+            label: '',
             fill: false,
             lineTension: 0.5,
             backgroundColor: 'rgba(75,192,192,1)',
@@ -244,7 +243,6 @@ export class Graphs extends React.Component {
     e.preventDefault() // don't refresh the page
     this.props.getNewGraph();
     this.props.getNewGraph();
-    console.log(this.props.graphs.addMessages.graphs)
 
     if (this.props.graphs.addMessages.graphs[1]) {
 
@@ -269,49 +267,30 @@ export class Graphs extends React.Component {
     let labelsArray = [];
     let dataArray = [];
     let columns = [];
-    var theFile = document.getElementById("myFile");
-    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+    let theFile = document.getElementById("fileUpload");
+    let regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
-      if (typeof (FileReader) != "undefined") { // if the browser supports FileReader
-        // var table = document.getElementById("myTable");
-        // var headerLine = "";
-        //create html5 file reader object
-        var myReader = new FileReader();
-        // call filereader. onload function
-        myReader.onload = async function (e) {
-          var content = await myReader.result;
-
-          //split csv file using "\n" for new line ( each row)
-          // var lines = content[0].split("\r");
-          var lines = content.split('\n')
-
-          let optionsArray = content.split('\n')[0].split(',');
-
-          for (let count = 1; count < 10; count++) {
-            let singleRowContent = content.split('\n')[count].split(',')
-            // if (this.state.selectedColumnData && this.state.selectedColumnLabels) {
-            // labelsArray.push(singleRowContent[optionsArray.indexOf(this.state.selectedColumnLabels)]) // using indexOf so that we can select two columns
-            // dataArray.push(Number(singleRowContent[optionsArray.indexOf(this.state.selectedColumnData)]))
-            // columns.push(optionsArray[count])
-            // } else {
-            labelsArray.push(singleRowContent[optionsArray.indexOf('age')]) // using indexOf so that we can select two columns
-            dataArray.push(Number(singleRowContent[optionsArray.indexOf('hui3_score')]))
+      if (typeof (FileReader) !== "undefined") { // if the browser supports FileReader
+        let fileReader = new FileReader();
+        fileReader.onload = async function (e) {
+          let text = await fileReader.result;
+          let optionsArray = text.split('\n')[0].split(',');
+          for (let count = 1; count < 50; count++) {
+            let singleRowText = text.split('\n')[count].split(',')
+            labelsArray.push(singleRowText[optionsArray.indexOf('age')]) // using indexOf so that we can select two columns
+            dataArray.push(Number(singleRowText[optionsArray.indexOf('hui3_score')]))
             columns.push(optionsArray[count])
-            // }
           }
-
         }
-
-        //call file reader onload
-        myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
+        fileReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
         this.setState({ columnsArray: columns }) // this just re-renders things
       }
       else {
-        alert("This browser doesn't support HTML5.  Use Chrome instead.  ");
+        console.error("This browser doesn't support FileReader!")
       }
     }
     else {
-      alert("Need to upload a valid .csv file!");
+      console.error("Not a valid .csv file!");
     }
     return false;
   }
@@ -322,77 +301,56 @@ export class Graphs extends React.Component {
     let columns = [];
     let selectedColumnLabels = this.state.selectedColumnLabels;
     let selectedColumnData = this.state.selectedColumnData;
-    var theFile = document.getElementById("myFile");
-    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+    let theFile = document.getElementById("fileUpload");
+    let dataTable = document.getElementById("dataTable");
+    let regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(theFile.value.toLowerCase())) { // if it's a .csv
-      if (typeof (FileReader) != "undefined") { // if the browser supports FileReader
-        // var table = document.getElementById("myTable");
-        // var headerLine = "";
-        //create html5 file reader object
-        var myReader = new FileReader();
-        // call filereader. onload function
-        myReader.onload = async function (e) {
-          var content = await myReader.result;
-
-          //split csv file using "\n" for new line ( each row)
-          // var lines = content[0].split("\r");
-          var lines = content.split('\n')
-
-          let optionsArray = content.split('\n')[0].split(',');
-
-          for (let count = 1; count < 10; count++) {
-            let singleRowContent = content.split('\n')[count].split(',')
-            labelsArray.push(singleRowContent[optionsArray.indexOf(selectedColumnLabels)]) // using indexOf so that we can select two columns
-            dataArray.push(Number(singleRowContent[optionsArray.indexOf(selectedColumnData)]))
+      if (typeof (FileReader) !== "undefined") { // if the browser supports FileReader
+        let fileReader = new FileReader();
+        fileReader.onload = async function (e) {
+          let text = await fileReader.result;
+          let lines = text.split('\n')
+          let optionsArray = text.split('\n')[0].split(',');
+          for (let count = 1; count < 50; count++) {
+            let singleRowText = text.split('\n')[count].split(',')
+            labelsArray.push(singleRowText[optionsArray.indexOf(selectedColumnLabels)]) // using indexOf so that we can select two columns
+            dataArray.push(Number(singleRowText[optionsArray.indexOf(selectedColumnData)]))
             columns.push(optionsArray[count])
           }
-          //loop all rows
-          for (var count = 0; count < 10; count++) {
-            //create a tr element
-            var row = document.createElement("tr");
-            //split each row content
-            var rowContent = lines[count].split(",");
-            //loop throw all columns of a row
-            for (var i = 0; i < rowContent.length; i++) {
-              //create td element
-              var cellElement = document.createElement("td");
-              if (count == 0) {
-                cellElement = document.createElement("th");
+          for (let count = 0; count < 50; count++) { // for all the rows we want to render
+            let row = document.createElement("tr"); // create a row element
+            let rowText = lines[count].split(","); // split the string into an array
+            for (let i = 0; i < rowText.length; i++) { // for all elements of the row
+              let dataCell = document.createElement("td");
+              if (count === 0) {
+                dataCell = document.createElement("th");
               } else {
-                cellElement = document.createElement("td");
+                dataCell = document.createElement("td");
               }
-              //add a row element as a node for table
-              var cellContent = document.createTextNode(rowContent[i]);
-
-              cellElement.appendChild(cellContent);
-              //append row child
-              row.appendChild(cellElement);
+              let cellText = document.createTextNode(rowText[i]);
+              dataCell.appendChild(cellText);
+              row.appendChild(dataCell); // append the created row element
             }
-            //append table contents
-            myTable.appendChild(row);
+            dataTable.appendChild(row); // append the row to the table
           }
         }
 
         //call file reader onload
-        myReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
+        fileReader.readAsText(theFile.files[0]); // only after the function is actually called, is the dataArray populated.
         this.setState({ dataArray: dataArray, labelsArray: labelsArray }) // this just re-renders things
       }
       else {
-        alert("This browser doesn't support HTML5.  Use Chrome instead.  ");
+        console.error("This browser doesn't support FileReader!")
       }
     }
     else {
-      alert("Need to upload a valid .csv file!");
+      console.error("Not a valid .csv file!");
     }
     return false;
   }
 
-
-
   // eslint-disable-next-line max-statements
   render() {
-
-    console.log("the state on render is, ", this.state)
 
     let valuesSource1 = []
     let valuesSource2 = []
@@ -464,7 +422,7 @@ export class Graphs extends React.Component {
     // const { labelsArray, dataArray } = this.state;
     let labelsArray = [];
     let dataArray = []
-    let theLabel = 'some title'
+    let theLabel = ''
     labelsArray = this.state.labelsArray
     dataArray = this.state.dataArray
     if (dataArray && labelsArray && this.state.count < 10) {
@@ -476,7 +434,7 @@ export class Graphs extends React.Component {
       labels: this.state.labelsArrayForRender,
       datasets: [
         {
-          label: 'units',
+          label: '',
           fill: false,
           lineTension: 0.5,
           backgroundColor: 'rgba(75,102,192,1)',
@@ -496,7 +454,7 @@ export class Graphs extends React.Component {
       labels: this.state.labelsArrayForRender,
       datasets: [
         {
-          label: 'millimeters',
+          label: '',
           backgroundColor: [
             '#B21F00',
             '#C9DE00',
@@ -535,7 +493,7 @@ export class Graphs extends React.Component {
       datasets: [
         {
           data: this.state.dataArrayForRender,
-          label: 'millimeters',
+          label: '',
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(255, 159, 64, 0.2)',
@@ -575,7 +533,7 @@ export class Graphs extends React.Component {
       datasets: [
         {
           data: this.state.dataArrayForRender,
-          label: 'U.K. (Statista)',
+          label: 'Source 1',
           fill: true,
           backgroundColor: 'rgba(250, 99, 132, 0.2)',
           borderColor: 'rgb(250, 99, 132)',
@@ -586,7 +544,7 @@ export class Graphs extends React.Component {
         },
         {
           data: this.state.dataArrayForRender,
-          label: 'Contiguous U.S. (NOAA)',
+          label: 'Source 2',
           fill: true,
           backgroundColor: 'rgba(25, 99, 132, 0.2)',
           borderColor: 'rgb(25, 99, 132)',
@@ -601,7 +559,7 @@ export class Graphs extends React.Component {
     let polarDataObject = {
       datasets: [
         {
-          label: 'millimeters',
+          label: '',
           data: this.state.dataArrayForRender,
           backgroundColor: [
             'rgb(200, 200, 200)',
@@ -647,7 +605,7 @@ export class Graphs extends React.Component {
           hoverBorderWidth: 3,
           hoverRadius: 3,
           hitRadius: 5,
-          label: 'millimeters',
+          label: '',
           pointStyle: 'star',
           rotation: 0,
           radius: 3
@@ -658,7 +616,7 @@ export class Graphs extends React.Component {
     let scatterDataObject = {
       datasets: [
         {
-          label: 'millimeters',
+          label: '',
           fill: false,
           lineTension: 0.5,
           backgroundColor: 'rgba(75,192,192,1)',
@@ -684,44 +642,48 @@ export class Graphs extends React.Component {
 
     return (
       <div>
-        Select a file: <input type="file" id="myFile" onChange={this.getAndConsoleLogGraphData} />
-        {/* <button type='button' onClick={this.getAndConsoleLogGraphData}>Show data/labels options</button> */}
-        <select name="columnSelect" onChange={this.selectColumnData}>
-          <option value="" defaultValue>
-            Data
-          </option>
-          {optionColumns}
-        </select>
-        <select name="columnSelect" onChange={this.selectColumnLabels}>
-          <option value="" defaultValue>
-            Labels
-          </option>
-          {optionColumns}
-        </select>
-        <button type='button' onClick={this.processFile}>Read File</button>
-        <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
 
-        <button type='button' onClick={this.resetGraph}>Reset</button>
-        <table id="myTable"></table>
-        <select name="selectName" className="chartType" onChange={this.handleChange}>
-          <option value="" defaultValue>
-            Select a chart type
-          </option>
-          <option value="line">Line</option>
-          <option value="pie">Pie</option>
-          <option value="doughnut">Doughnut</option>
-          <option value="bar">Bar</option>
-          <option value="radar">Radar</option>
-          <option value="polar">Polar</option>
-          <option value="bubble">Bubble</option>
-          <option value="scatter">Scatter</option>
-        </select>
 
 
 
 
         <div className='graphAndChat'>
           <div>
+            <MessagesList />
+          </div>
+          <div>
+            Select a file: <input type="file" id="fileUpload" onChange={this.getAndConsoleLogGraphData} />
+            {/* <button type='button' onClick={this.getAndConsoleLogGraphData}>Show data/labels options</button> */}
+            <select name="columnSelect" onChange={this.selectColumnData}>
+              <option value="" defaultValue>
+                Data
+          </option>
+              {optionColumns}
+            </select>
+            <select name="columnSelect" onChange={this.selectColumnLabels}>
+              <option value="" defaultValue>
+                Labels
+          </option>
+              {optionColumns}
+            </select>
+            <button type='button' onClick={this.processFile}>Read File</button>
+            <button type='button' onClick={this.getAndConsoleLogGraphData}>Re-Render</button>
+
+            <button type='button' onClick={this.resetGraph}>Reset</button>
+            <table id="dataTable"></table>
+            <select name="selectName" className="chartType" onChange={this.handleChange}>
+              <option value="" defaultValue>
+                Select a chart type
+          </option>
+              <option value="line">Line</option>
+              <option value="pie">Pie</option>
+              <option value="doughnut">Doughnut</option>
+              <option value="bar">Bar</option>
+              <option value="radar">Radar</option>
+              <option value="polar">Polar</option>
+              <option value="bubble">Bubble</option>
+              <option value="scatter">Scatter</option>
+            </select>
             {(() => {
               switch (this.state.selectedOption) {
                 case 'line':
@@ -848,9 +810,6 @@ export class Graphs extends React.Component {
                   return <div>none</div>
               }
             })()}
-          </div>
-          <div>
-            <MessagesList />
           </div>
         </div>
       </div>

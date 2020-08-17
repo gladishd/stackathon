@@ -42,9 +42,9 @@ const authors = [{
 const id = () => Math.round(Math.random() * (authors.length - 1)) + 1;
 
 const messages = [
-  { authorId: id(), content: 'Don’t expect a formal university to teach you material applicable to practicing data science in industry. ', channelId: 1 },
-  { authorId: id(), content: 'Data science projects, blog posts, or Github repos can get you in the door for a job interview.', channelId: 1 },
-  { authorId: id(), content: 'Try a top-down approach to learning. Figure out what problems a technology or algorithm can solve before delving into the details of how the method works.', channelId: 1 },
+  { authorId: id(), content: 'Upload a valid .csv file (with row IDs and column titles). ', channelId: 1 },
+  { authorId: id(), content: 'Select the numeric columns which you want for data and labels.  ', channelId: 1 },
+  { authorId: id(), content: 'Click Read File, and then Re-Render a couple of times to make sure the database is populated.  The Reset button clears the database.  ', channelId: 1 },
   { authorId: id(), content: 'Focus on building a portfolio, composed of real-world data science projects, to demonstrate your technical skills. ', channelId: 2 },
   { authorId: id(), content: 'Make learning data science fun by working on projects that personally interest you or solve a problem you or others around you have. ', channelId: 2 },
   { authorId: id(), content: 'Reading, whether technical or for personal learning, is part of a process of becoming less wrong about the world.', channelId: 2 },

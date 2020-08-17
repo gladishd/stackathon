@@ -97,7 +97,6 @@ export const fetchNewGraphData = () => {
 
 export const resetGraphDataThunk = () => {
   return async (dispatch) => {
-    console.log('did we reach the reset graph data thunk?')
     const response = await axios.delete('/api/graphs');
     const data = response.data;
     const action = resetDatabaseActionCreator(data);
