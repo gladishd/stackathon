@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Stackathon Project for Fullstack Academy",
   "engines": {
-    "node": "~12.11.1"
+    "node": "^14.13.1 || >= 16.0.0"
   },
   "main": "index.js",
   "scripts": {
@@ -55,7 +55,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
-    "pg": "^7.9.0",
+    "pg": "^8.5.1",
     "pg-hstore": "^2.3.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -83,7 +83,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
     "axios-mock-adapter": "^1.16.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.5",
     "chai": "^4.2.0",
     "enzyme": "^3.9.0",
@@ -124,7 +124,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
     "axios-mock-adapter": "^1.16.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.5",
     "chai": "^4.2.0",
     "enzyme": "^3.9.0",

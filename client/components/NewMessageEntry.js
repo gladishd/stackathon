@@ -77,12 +77,11 @@ class NewMessageEntry extends Component {
             <button className="btn btn-default" type="submit">
               Chat!
             </button>
-            <button type="button" onClick={this.sound1}>
-              ‎‎
-            </button>
+            {/* <button type="button" onClick={this.sound1}> */}‎‎
+            {/* </button> */}
           </span>
         </div>
-      </form>
+      </form >
     );
   }
 }
